@@ -8,7 +8,11 @@
 import Foundation
 import UIKit
 
-final class NewsDetailsViewController: BaseViewController {
+final class NewsDetailsViewController: UIViewController {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .white
+    }
 }
-
