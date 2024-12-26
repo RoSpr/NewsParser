@@ -42,6 +42,7 @@ final class NewsListViewController: UIViewController {
     }
     
     private func configure() {
+        overrideUserInterfaceStyle = .light
         tableView.delegate = self
         tableView.dataSource = self
     }
