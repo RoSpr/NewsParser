@@ -15,29 +15,48 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         window = UIWindow(windowScene: windowScene)
+            
+        let tabBarController = createTabBarController()
+        let newsNavigationController = createNewsNavigationController()
+        let settingsNavigationController = createSettingsNavigationController()
         
-        let tabBarController = UITabBarController()
-        let tabBar = tabBarController.tabBar
-        tabBar.unselectedItemTintColor = .systemGray3
+        tabBarController.viewControllers = [newsNavigationController, settingsNavigationController]
         
-        // Add blur to the tab bar
-        let appearance = UITabBarAppearance()
-        appearance.configureWithDefaultBackground()
-        appearance.backgroundEffect = UIBlurEffect(style: .light)
-        appearance.backgroundColor = UIColor.white.withAlphaComponent(0.7)
-        tabBar.standardAppearance = appearance
-        tabBar.scrollEdgeAppearance = tabBar.standardAppearance
-        
-        let newsListViewController = NewsListViewController()
-        newsListViewController.tabBarItem = UITabBarItem(title: "Новости", image: UIImage(systemName: "newspaper"), tag: 0)
-        
-        let settingsViewController = SettingsViewController()
-        settingsViewController.tabBarItem = UITabBarItem(title: "Настройки", image: UIImage(systemName: "gear"), tag: 1)
-        
-        tabBarController.viewControllers = [newsListViewController, settingsViewController]
+        tabBarController.view.backgroundColor = .clear
         
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
+    
+    
+    private func createTabBarController() -> UITabBarController {
+        let tabBarController = UITabBarController()
+        let tabBar = tabBarController.tabBar
+        
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .systemThinMaterialLight)
+        appearance.backgroundColor = .clear
+        appearance.shadowColor = .clear
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
+        
+        return tabBarController
+    }
+    
+    private func createNewsNavigationController() -> UINavigationController {
+        let newsListViewController = NewsListViewController()
+        let newsNavigationController = UINavigationController(rootViewController: newsListViewController)
+        newsNavigationController.tabBarItem = UITabBarItem(title: "Новости", image: UIImage(systemName: "newspaper"), tag: 0)
+        
+        return newsNavigationController
+    }
+    
+    private func createSettingsNavigationController() -> UINavigationController {
+        let settingsViewController = SettingsViewController()
+        let settingsNavigationController = UINavigationController(rootViewController: settingsViewController)
+        settingsNavigationController.tabBarItem = UITabBarItem(title: "Настройки", image: UIImage(systemName: "gear"), tag: 1)
+        
+        return settingsNavigationController
+    }
 }
-
