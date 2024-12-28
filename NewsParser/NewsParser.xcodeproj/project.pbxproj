@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		22EFD9BF2D18A70700E8B1AF /* Exceptions for "NewsParser" folder in "NewsParser" target */ = {
+		22EA72FE2D1D921B00B00A07 /* Exceptions for "NewsParser" folder in "NewsParser" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -21,10 +21,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		22EFD9AF2D18A6D900E8B1AF /* NewsParser */ = {
+		22EA72F42D1D921B00B00A07 /* NewsParser */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				22EFD9BF2D18A70700E8B1AF /* Exceptions for "NewsParser" folder in "NewsParser" target */,
+				22EA72FE2D1D921B00B00A07 /* Exceptions for "NewsParser" folder in "NewsParser" target */,
 			);
 			path = NewsParser;
 			sourceTree = "<group>";
@@ -45,7 +45,7 @@
 		22EFD9A42D18A6D800E8B1AF = {
 			isa = PBXGroup;
 			children = (
-				22EFD9AF2D18A6D900E8B1AF /* NewsParser */,
+				22EA72F42D1D921B00B00A07 /* NewsParser */,
 				22EFD9AE2D18A6D900E8B1AF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,7 +74,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				22EFD9AF2D18A6D900E8B1AF /* NewsParser */,
+				22EA72F42D1D921B00B00A07 /* NewsParser */,
 			);
 			name = NewsParser;
 			packageProductDependencies = (
