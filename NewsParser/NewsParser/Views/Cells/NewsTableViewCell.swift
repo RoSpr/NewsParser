@@ -46,6 +46,28 @@ final class NewsTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    private let newsSourceLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .systemGray
+        label.font = .systemFont(ofSize: 12)
+        label.numberOfLines = 0
+        label.textAlignment = .left
+        
+        return label
+    }()
+    
+    private let dateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .systemGray
+        label.font = .systemFont(ofSize: 12)
+        label.numberOfLines = 1
+        label.textAlignment = .right
+        
+        return label
+    }()
+    
     private lazy var newsHeaderLeftToCellConstraint: NSLayoutConstraint = newsHeaderLabel.leftAnchor.constraint(equalTo: isReadImageView.rightAnchor, constant: 12)
     private lazy var newsHeaderLeftToImageViewConstraint: NSLayoutConstraint = newsHeaderLabel.leftAnchor.constraint(equalTo: newsImageView.leftAnchor, constant: 12)
     
@@ -74,7 +96,7 @@ final class NewsTableViewCell: UITableViewCell {
     }
     
     private func addSubviews() {
-        [isReadImageView, newsImageView, newsHeaderLabel].forEach {
+        [isReadImageView, newsImageView, newsHeaderLabel, newsSourceLabel, dateLabel].forEach {
             self.addSubview($0)
         }
     }
@@ -94,7 +116,16 @@ final class NewsTableViewCell: UITableViewCell {
             
             newsHeaderLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             newsHeaderLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -48),
-            newsHeaderLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            
+            newsSourceLabel.leftAnchor.constraint(equalTo: newsHeaderLabel.leftAnchor),
+            newsSourceLabel.topAnchor.constraint(equalTo: newsHeaderLabel.bottomAnchor, constant: 4),
+            newsSourceLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            
+            dateLabel.leftAnchor.constraint(equalTo: newsSourceLabel.rightAnchor, constant: 4),
+            dateLabel.centerYAnchor.constraint(equalTo: newsSourceLabel.centerYAnchor),
+            dateLabel.rightAnchor.constraint(equalTo: newsHeaderLabel.rightAnchor),
+            dateLabel.heightAnchor.constraint(equalToConstant: 21),
+            dateLabel.widthAnchor.constraint(equalToConstant: 110),
         ])
     }
     
@@ -109,6 +140,10 @@ final class NewsTableViewCell: UITableViewCell {
         
         newsHeaderLabel.text = viewModel.newsHeader
         newsHeaderLabel.sizeToFit()
+        
+        newsSourceLabel.text = viewModel.newsSource
+        
+        dateLabel.text = viewModel.newsDate
         
         isReadImageView.tintColor = viewModel.isRead ? .systemGreen : .systemGray
     }

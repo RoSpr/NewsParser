@@ -16,4 +16,13 @@ struct Utils {
         
         return formatter.date(from: string)
     }
+    
+    static func getStringFromDate(_ date: Date?, format: String = "dd-MM-yyyy, HH:mm") -> String? {
+        guard let date else { return nil }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        
+        return formatter.string(from: date)
+    }
 }

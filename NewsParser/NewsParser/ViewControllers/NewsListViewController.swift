@@ -97,11 +97,17 @@ extension NewsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as? NewsTableViewCell
-        let rssItem = viewModel?.itemAtIndex(indexPath: indexPath)
-        cell?.viewModel = NewsCellViewModelImpl(newsHeader: rssItem?.title ?? "No title", newsSource: rssItem?.sourceTitle ?? "No source")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier,
+                                                       for: indexPath) as? NewsTableViewCell,
+              let rssItem = viewModel?.itemAtIndex(indexPath: indexPath) else {
+            return UITableViewCell(style: .default, reuseIdentifier: nil)
+        }
         
-        return cell!
+        cell.viewModel = NewsCellViewModelImpl(newsHeader: rssItem.title,
+                                               newsSource: rssItem.sourceTitle,
+                                               date: rssItem.pubDate)
+        
+        return cell
     }
 }
 
