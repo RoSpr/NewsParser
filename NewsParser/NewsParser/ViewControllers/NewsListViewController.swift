@@ -81,7 +81,13 @@ extension NewsListViewController: UITableViewDelegate {
         let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
         cell?.viewModel?.isRead = true
         tableView.deselectRow(at: indexPath, animated: false)
+        
         let newsDetailViewController = NewsDetailsViewController()
+        if let viewModel = viewModel {
+            let newsDetailViewModel = NewsDetailsViewControllerViewModelImpl(item: viewModel.itemAtIndex(indexPath: indexPath))
+            newsDetailViewController.viewModel = newsDetailViewModel
+        }
+        
         navigationController?.pushViewController(newsDetailViewController, animated: true)
     }
 }
