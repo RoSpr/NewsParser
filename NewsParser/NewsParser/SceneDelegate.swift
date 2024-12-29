@@ -46,6 +46,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func createNewsNavigationController() -> UINavigationController {
         let newsListViewController = NewsListViewController()
+        newsListViewController.viewModel = NewsListViewControllerViewModelImpl()
+        
         let newsNavigationController = UINavigationController(rootViewController: newsListViewController)
         newsNavigationController.tabBarItem = UITabBarItem(title: "Новости", image: UIImage(systemName: "newspaper"), tag: 0)
         

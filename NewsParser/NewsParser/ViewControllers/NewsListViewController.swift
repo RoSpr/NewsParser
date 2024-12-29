@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 final class NewsListViewController: UIViewController {
+    var viewModel: NewsListViewControllerViewModel?
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -26,6 +28,9 @@ final class NewsListViewController: UIViewController {
         setupConstraints()
         configure()
         setupNavigationBar()
+        
+        viewModel?.delegate = self
+        viewModel?.startFetchingIfNeeded()
     }
 
     private func addSubviews() {
@@ -73,30 +78,38 @@ final class NewsListViewController: UIViewController {
 //MARK: - Table view delegate
 extension NewsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
+        cell?.viewModel?.isRead = true
         tableView.deselectRow(at: indexPath, animated: false)
         let newsDetailViewController = NewsDetailsViewController()
         navigationController?.pushViewController(newsDetailViewController, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
     }
 }
 
 //MARK: - Table view data source
 extension NewsListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return viewModel?.numberOfSections ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 15
+        return viewModel?.numberOfItemsInSection(section: section) ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as? NewsTableViewCell
-        cell?.viewModel = NewsCellViewModelImpl(newsHeader: "Test", newsSource: "Test source")
+        let rssItem = viewModel?.itemAtIndex(indexPath: indexPath)
+        cell?.viewModel = NewsCellViewModelImpl(newsHeader: rssItem?.title ?? "No title", newsSource: rssItem?.sourceTitle ?? "No source")
         
         return cell!
+    }
+}
+
+//MARK: - NewsListViewControllerDelegate
+extension NewsListViewController: NewsListViewControllerDelegate {
+    func reloadData() {
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
 }
