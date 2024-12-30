@@ -13,17 +13,43 @@ final class NewsTableViewCell: UITableViewCell {
     
     var viewModel: NewsCellViewModel? = nil {
         didSet {
-            configure()
+            self.configure()
+        }
+    }
+    
+    private(set) lazy var downloadProgressHandler: ((Double) -> Void) = { [weak self] progress in
+        guard let self = self else { return }
+        DispatchQueue.main.async {
+            self.downloadProgressView.progress = Float(progress)
+        }
+    }
+    
+    private(set) lazy var downloadCompletedHandler: ((UIImage) -> Void) = { [weak self] image in
+        guard let self = self else { return }
+        DispatchQueue.main.async {
+            self.downloadProgressView.isHidden = true
+            self.newsImageView.image = image
         }
     }
     
     private let newsImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         
         return imageView
+    }()
+    
+    private let downloadProgressView: UIProgressView = {
+        let progressView = UIProgressView()
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.progressTintColor = .systemGray
+        progressView.progress = 0
+        progressView.progressImage = UIImage(systemName: "circle")
+        progressView.isHidden = true
+        
+        return progressView
     }()
     
     private let newsHeaderLabel: UILabel = {
@@ -33,6 +59,8 @@ final class NewsTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 18)
         label.numberOfLines = 0
         label.textAlignment = .left
+        
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         
         return label
     }()
@@ -54,6 +82,8 @@ final class NewsTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.textAlignment = .left
         
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        
         return label
     }()
     
@@ -65,11 +95,13 @@ final class NewsTableViewCell: UITableViewCell {
         label.numberOfLines = 1
         label.textAlignment = .right
         
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        
         return label
     }()
     
     private lazy var newsHeaderLeftToCellConstraint: NSLayoutConstraint = newsHeaderLabel.leftAnchor.constraint(equalTo: isReadImageView.rightAnchor, constant: 12)
-    private lazy var newsHeaderLeftToImageViewConstraint: NSLayoutConstraint = newsHeaderLabel.leftAnchor.constraint(equalTo: newsImageView.leftAnchor, constant: 12)
+    private lazy var newsHeaderLeftToImageViewConstraint: NSLayoutConstraint = newsHeaderLabel.leftAnchor.constraint(equalTo: newsImageView.rightAnchor, constant: 12)
     
     convenience init(viewModel: NewsCellViewModel) {
         self.init(style: .default, reuseIdentifier: NewsTableViewCell.identifier)
@@ -96,30 +128,34 @@ final class NewsTableViewCell: UITableViewCell {
     }
     
     private func addSubviews() {
-        [isReadImageView, newsImageView, newsHeaderLabel, newsSourceLabel, dateLabel].forEach {
-            self.addSubview($0)
+        [isReadImageView, newsImageView, downloadProgressView, newsHeaderLabel, newsSourceLabel, dateLabel].forEach {
+            contentView.addSubview($0)
         }
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            isReadImageView.leftAnchor.constraint(equalTo: leftAnchor, constant: 12),
-            isReadImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            isReadImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
+            isReadImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             isReadImageView.heightAnchor.constraint(equalToConstant: 16),
             isReadImageView.widthAnchor.constraint(equalToConstant: 16),
             
-            newsImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            newsImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             newsImageView.leftAnchor.constraint(equalTo: isReadImageView.rightAnchor, constant: 12),
-            newsImageView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            newsImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+            newsImageView.heightAnchor.constraint(equalToConstant: 50),
             newsImageView.widthAnchor.constraint(equalTo: newsImageView.heightAnchor),
             
-            newsHeaderLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            newsHeaderLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -48),
+            downloadProgressView.centerXAnchor.constraint(equalTo: newsImageView.centerXAnchor),
+            downloadProgressView.centerYAnchor.constraint(equalTo: newsImageView.centerYAnchor),
+            downloadProgressView.widthAnchor.constraint(equalToConstant: 20),
+            downloadProgressView.heightAnchor.constraint(equalTo: downloadProgressView.widthAnchor),
+            
+            newsHeaderLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            newsHeaderLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12),
             
             newsSourceLabel.leftAnchor.constraint(equalTo: newsHeaderLabel.leftAnchor),
             newsSourceLabel.topAnchor.constraint(equalTo: newsHeaderLabel.bottomAnchor, constant: 4),
-            newsSourceLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            newsSourceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
             dateLabel.leftAnchor.constraint(equalTo: newsSourceLabel.rightAnchor, constant: 4),
             dateLabel.centerYAnchor.constraint(equalTo: newsSourceLabel.centerYAnchor),
@@ -134,15 +170,14 @@ final class NewsTableViewCell: UITableViewCell {
         
         if let image = viewModel.image {
             newsImageView.image = image
+        } else if viewModel.hasImage {
+            downloadProgressView.isHidden = false
         }
         
-        setupLabelsLeftConstraints(hasImage: viewModel.image != nil)
+        setupLabelsLeftConstraints(hasImage: viewModel.hasImage)
         
         newsHeaderLabel.text = viewModel.newsHeader
-        newsHeaderLabel.sizeToFit()
-        
         newsSourceLabel.text = viewModel.newsSource
-        
         dateLabel.text = viewModel.newsDate
         
         isReadImageView.tintColor = viewModel.isRead ? .systemGreen : .systemGray
@@ -156,9 +191,15 @@ final class NewsTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        viewModel = nil
         newsImageView.image = nil
-        newsImageView.isHidden = true
+        newsImageView.isHidden = false
+        downloadProgressView.progress = 0
+        downloadProgressView.isHidden = true
         newsHeaderLabel.text = nil
+        newsSourceLabel.text = nil
+        dateLabel.text = nil
         isReadImageView.tintColor = .systemGray
+        setupLabelsLeftConstraints(hasImage: false)
     }
 }

@@ -10,6 +10,8 @@ import UIKit
 
 protocol NewsCellViewModel {
     var image: UIImage? { get }
+    var hasImage: Bool { get }
+    var downloadedImageURL: URL? { get set }
     var newsHeader: String { get }
     var newsSource: String { get }
     var newsDate: String? { get }
@@ -17,14 +19,24 @@ protocol NewsCellViewModel {
 }
 
 final class NewsCellViewModelImpl: NewsCellViewModel {
-    let image: UIImage?
+    var image: UIImage? {
+        if let url = downloadedImageURL {
+            return UIImage(contentsOfFile: url.path)
+        } else {
+            return nil
+        }
+    }
+    
+    let hasImage: Bool
+    var downloadedImageURL: URL? = nil
+    
     let newsHeader: String
     let newsSource: String
     let newsDate: String?
     var isRead: Bool
     
-    init(newsHeader: String, newsSource: String, date: Date) {
-        self.image = nil
+    init(newsHeader: String, newsSource: String, date: Date, hasImage: Bool) {
+        self.hasImage = hasImage
         self.newsHeader = newsHeader
         self.newsSource = newsSource
         self.newsDate = Utils.getStringFromDate(date)

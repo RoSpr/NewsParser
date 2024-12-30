@@ -85,6 +85,7 @@ extension NewsListViewController: UITableViewDelegate {
         let newsDetailViewController = NewsDetailsViewController()
         if let viewModel = viewModel {
             let newsDetailViewModel = NewsDetailsViewControllerViewModelImpl(item: viewModel.itemAtIndex(indexPath: indexPath))
+            newsDetailViewModel.image = cell?.viewModel?.image
             newsDetailViewController.viewModel = newsDetailViewModel
         }
         
@@ -111,7 +112,19 @@ extension NewsListViewController: UITableViewDataSource {
         
         cell.viewModel = NewsCellViewModelImpl(newsHeader: rssItem.title,
                                                newsSource: rssItem.sourceTitle,
-                                               date: rssItem.pubDate)
+                                               date: rssItem.pubDate,
+                                               hasImage: rssItem.imageLink != nil)
+        
+        if let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
+            viewModel?.networkManager.downloadContent(from: url, completion: { localURL, error in
+                if let localURL = localURL, let data = try? Data(contentsOf: localURL), let image = UIImage(data: data) {
+                    cell.downloadCompletedHandler(image)
+                    cell.viewModel?.downloadedImageURL = localURL
+                } else if let error = error {
+                    print("Failed to download image: \(error)")
+                }
+            }, progressUpdate: cell.downloadProgressHandler)
+        }
         
         return cell
     }
