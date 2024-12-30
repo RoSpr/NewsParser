@@ -166,7 +166,9 @@ final class NewsTableViewCell: UITableViewCell {
         guard let viewModel = viewModel else { return }
         
         if let image = viewModel.image {
+            newsImageView.isHidden = false
             newsImageView.image = image
+            downloadProgressView.isHidden = true
         } else if viewModel.hasImage && viewModel.image == nil {
             downloadProgressView.isHidden = false
         }
@@ -190,7 +192,7 @@ final class NewsTableViewCell: UITableViewCell {
         
         viewModel = nil
         newsImageView.image = nil
-        newsImageView.isHidden = false
+        newsImageView.isHidden = true
         downloadProgressView.setProgress(0, animated: false)
         downloadProgressView.isHidden = true
         newsHeaderLabel.text = nil
