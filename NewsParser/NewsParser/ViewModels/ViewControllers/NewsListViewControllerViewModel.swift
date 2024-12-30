@@ -10,6 +10,8 @@ import Foundation
 protocol NewsListViewControllerViewModel {
     var delegate: NewsListViewControllerDelegate? { get set }
     
+    var networkManager: NetworkManagerProtocol { get }
+    
     var numberOfSections: Int { get }
     func numberOfItemsInSection(section: Int) -> Int
     
@@ -25,6 +27,8 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
             delegate?.reloadData()
         }
     }
+    
+    lazy var networkManager: NetworkManagerProtocol = NetworkManager()
     
     weak var delegate: NewsListViewControllerDelegate? = nil
     
