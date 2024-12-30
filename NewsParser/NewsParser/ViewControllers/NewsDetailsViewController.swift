@@ -14,6 +14,20 @@ final class NewsDetailsViewController: UIViewController {
     private lazy var topLabelsTopContraintToTop: NSLayoutConstraint = sourceTitleLabel.topAnchor.constraint(equalTo: newsTitleLabel.bottomAnchor, constant: 10)
     private lazy var topLabelsTopConstraintToImageView: NSLayoutConstraint = sourceTitleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10)
     
+    private var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return scrollView
+    }()
+    
+    private var scrollContentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private var newsTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -28,8 +42,7 @@ final class NewsDetailsViewController: UIViewController {
     private var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .gray
+        imageView.contentMode = .scaleAspectFit
         imageView.isHidden = true
         
         return imageView
@@ -63,6 +76,7 @@ final class NewsDetailsViewController: UIViewController {
         textView.textColor = .darkText
         textView.isEditable = false
         textView.backgroundColor = .white
+        textView.isScrollEnabled = false
         
         return textView
     }()
@@ -78,33 +92,49 @@ final class NewsDetailsViewController: UIViewController {
     }
     
     private func addSubviews() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(scrollContentView)
+        
         [newsTitleLabel, imageView, sourceTitleLabel, dateLabel, textView].forEach {
-            view.addSubview($0)
+            scrollContentView.addSubview($0)
         }
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            newsTitleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
-            newsTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            newsTitleLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
-            imageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 48),
+            scrollContentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+            scrollContentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            scrollContentView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+            scrollContentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            scrollContentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            scrollContentView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor),
+            
+            newsTitleLabel.leftAnchor.constraint(equalTo: scrollContentView.leftAnchor, constant: 16),
+            newsTitleLabel.topAnchor.constraint(equalTo: scrollContentView.topAnchor, constant: 12),
+            newsTitleLabel.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor, constant: -16),
+            
+            imageView.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 48),
             imageView.topAnchor.constraint(equalTo: newsTitleLabel.bottomAnchor, constant: 6),
-            imageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -48),
+            imageView.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor, constant: -48),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.8),
             
-            sourceTitleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
+            sourceTitleLabel.leftAnchor.constraint(equalTo: scrollContentView.leftAnchor, constant: 16),
             sourceTitleLabel.widthAnchor.constraint(equalTo: dateLabel.widthAnchor),
             
             dateLabel.leftAnchor.constraint(equalTo: sourceTitleLabel.rightAnchor, constant: 2),
-            dateLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            dateLabel.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor, constant: -16),
             dateLabel.topAnchor.constraint(equalTo: sourceTitleLabel.topAnchor),
             
-            textView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            textView.leftAnchor.constraint(equalTo: scrollContentView.leftAnchor),
             textView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 20),
-            textView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            textView.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor),
+            textView.bottomAnchor.constraint(lessThanOrEqualTo: scrollContentView.bottomAnchor)
         ])
     }
     
