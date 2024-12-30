@@ -167,7 +167,7 @@ final class NewsTableViewCell: UITableViewCell {
         
         if let image = viewModel.image {
             newsImageView.image = image
-        } else if viewModel.hasImage {
+        } else if viewModel.hasImage && viewModel.image == nil {
             downloadProgressView.isHidden = false
         }
         

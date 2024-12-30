@@ -10,8 +10,6 @@ import Foundation
 protocol NewsListViewControllerViewModel {
     var delegate: NewsListViewControllerDelegate? { get set }
     
-    var networkManager: NetworkManagerProtocol { get }
-    
     var numberOfSections: Int { get }
     func numberOfItemsInSection(section: Int) -> Int
     
@@ -21,13 +19,12 @@ protocol NewsListViewControllerViewModel {
 }
 
 final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel {
+    private let queue: DispatchQueue = DispatchQueue(label: "com.newsListViewModel.queue", attributes: .concurrent)
     private var newsSources: [RSSItem] = [] {
         didSet {
             delegate?.reloadData()
         }
     }
-    
-    lazy var networkManager: NetworkManagerProtocol = NetworkManager()
     
     weak var delegate: NewsListViewControllerDelegate? = nil
     
@@ -42,9 +39,11 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
     }
     
     func startFetchingIfNeeded() {
-        Task {
-            newsSources = await RSSParserManager().fetchMultipleRSSFeeds(urls: ["https://www.vedomosti.ru/rss/articles.xml"])
-                .sorted(by: { $0.pubDate > $1.pubDate })
+        queue.async {
+            Task { [weak self] in
+                self?.newsSources = await RSSParserManager().fetchMultipleRSSFeeds(urls: ["https://www.vedomosti.ru/rss/articles.xml"])
+                    .sorted(by: { $0.pubDate > $1.pubDate })
+            }
         }
     }
 }
