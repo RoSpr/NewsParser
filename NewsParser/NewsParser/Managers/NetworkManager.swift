@@ -11,9 +11,10 @@ protocol NetworkManagerProtocol {
     func downloadContent(from url: URL, completion: @escaping (URL?, Error?) -> Void, progressUpdate: ((Double) -> Void)?)
 }
 
-final class NetworkManager: NetworkManagerProtocol {
+final class NetworkManager: NSObject, NetworkManagerProtocol {
     private let downloadQueue = OperationQueue()
     private let urlSession = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+    private var downloadObservations: [Int: NSKeyValueObservation] = [:]
     
     func downloadContent(from url: URL, completion: @escaping (URL?, Error?) -> Void, progressUpdate: ((Double) -> Void)?) {
         downloadQueue.addOperation { [weak self] in
@@ -33,9 +34,14 @@ final class NetworkManager: NetworkManagerProtocol {
                 completion(localURL, nil)
             }
             
-            let _ = task.progress.observe(\.fractionCompleted) { progress, _ in
+            let observation = task.progress.observe(\.fractionCompleted) { progress, _ in
+                if progress.isFinished {
+                    self.downloadObservations[task.taskIdentifier]?.invalidate()
+                }
                 progressUpdate?(progress.fractionCompleted)
             }
+            
+            downloadObservations[task.taskIdentifier] = observation
             
             task.resume()
         }

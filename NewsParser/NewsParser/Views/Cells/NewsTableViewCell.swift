@@ -20,7 +20,7 @@ final class NewsTableViewCell: UITableViewCell {
     private(set) lazy var downloadProgressHandler: ((Double) -> Void) = { [weak self] progress in
         guard let self = self else { return }
         DispatchQueue.main.async {
-            self.downloadProgressView.progress = Float(progress)
+            self.downloadProgressView.setProgress(progress, animated: true)
         }
     }
     
@@ -41,12 +41,9 @@ final class NewsTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private let downloadProgressView: UIProgressView = {
-        let progressView = UIProgressView()
+    private let downloadProgressView: CircularProgressBarView = {
+        let progressView = CircularProgressBarView()
         progressView.translatesAutoresizingMaskIntoConstraints = false
-        progressView.progressTintColor = .systemGray
-        progressView.progress = 0
-        progressView.progressImage = UIImage(systemName: "circle")
         progressView.isHidden = true
         
         return progressView
@@ -194,7 +191,7 @@ final class NewsTableViewCell: UITableViewCell {
         viewModel = nil
         newsImageView.image = nil
         newsImageView.isHidden = false
-        downloadProgressView.progress = 0
+        downloadProgressView.setProgress(0, animated: false)
         downloadProgressView.isHidden = true
         newsHeaderLabel.text = nil
         newsSourceLabel.text = nil
