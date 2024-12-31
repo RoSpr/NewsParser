@@ -3,3 +3,6 @@ NewsParser/NewsParser.xcodeproj/xcuserdata/rodion.xcuserdatad/xcschemes/xcscheme
 NewsParser/NewsParser.xcodeproj/xcuserdata/rodion.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
 NewsParser/NewsParser.xcodeproj/project.xcworkspace/xcuserdata/rodion.xcuserdatad/UserInterfaceState.xcuserstate
 NewsParser/Pods/
+NewsParser/NewsParser.xcworkspace
+NewsParser/.DS_Store
+.DS_Store
