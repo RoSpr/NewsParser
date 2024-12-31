@@ -18,7 +18,7 @@ protocol NewsDetailsViewControllerViewModel {
 }
 
 final class NewsDetailsViewControllerViewModelImpl: NewsDetailsViewControllerViewModel {
-    private var rssItem: RSSItem
+    private var rssItem: RSSItemRaw
     
     var title: String {
         rssItem.title
@@ -42,7 +42,7 @@ final class NewsDetailsViewControllerViewModelImpl: NewsDetailsViewControllerVie
         Utils.getStringFromDate(rssItem.pubDate)
     }
     
-    init(item: RSSItem) {
+    init(item: RSSItemRaw) {
         self.rssItem = item
         
         startImageDownloadIfNeeded()

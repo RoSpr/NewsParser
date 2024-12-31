@@ -8,14 +8,14 @@
 import Foundation
 
 class RSSParserDelegate: NSObject, XMLParserDelegate {
-    private let onItemParsed: (RSSItem) -> Void
+    private let onItemParsed: (RSSItemRaw) -> Void
     private var currentItem: [String: String]? = nil
     private var currentElement: String = ""
     private var currentValue: String = ""
     
     private var sourceTitle: String? = nil
 
-    init(onItemParsed: @escaping (RSSItem) -> Void) {
+    init(onItemParsed: @escaping (RSSItemRaw) -> Void) {
         self.onItemParsed = onItemParsed
     }
 
@@ -41,7 +41,7 @@ class RSSParserDelegate: NSObject, XMLParserDelegate {
                 let description = currentItem?["description"]
                 let imageLink = currentItem?["imageLink"]
                 
-                onItemParsed(RSSItem(sourceTitle: sourceTitle ?? "Unknown", title: title, link: link, imageLink: imageLink, description: description, pubDate: pubDate))
+                onItemParsed(RSSItemRaw(sourceTitle: sourceTitle ?? "Unknown", title: title, link: link, imageLink: imageLink, description: description, pubDate: pubDate))
             }
             currentItem = nil
         } else if elementName == "title" && sourceTitle == nil {

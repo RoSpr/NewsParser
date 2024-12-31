@@ -6,8 +6,16 @@
 //
 
 import Foundation
+import RealmSwift
 
-struct NewsSource {
-    var name: String?
-    var stringURL: String
+class NewsSource: Object {
+    @Persisted var id = UUID().uuidString
+    @Persisted var name: String?
+    @Persisted var stringURL: String
+    @Persisted var isActive: Bool = true
+    @Persisted var news: List<RSSItem>
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

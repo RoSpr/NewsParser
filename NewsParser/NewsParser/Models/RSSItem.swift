@@ -6,12 +6,28 @@
 //
 
 import Foundation
+import RealmSwift
 
-struct RSSItem {
-    let sourceTitle: String
-    let title: String
-    let link: String
-    let imageLink: String?
-    let description: String?
-    let pubDate: Date
+class RSSItem: Object {
+    @Persisted var id = UUID().uuidString
+    @Persisted var sourceTitle: String
+    @Persisted var title: String
+    @Persisted var link: String
+    @Persisted var imageLink: String?
+    @Persisted var newsDescription: String?
+    @Persisted var pubDate: Date
+    @Persisted var isRead: Bool = false
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+}
+
+struct RSSItemRaw {
+    var sourceTitle: String
+    var title: String
+    var link: String
+    var imageLink: String?
+    var description: String?
+    var pubDate: Date
 }
