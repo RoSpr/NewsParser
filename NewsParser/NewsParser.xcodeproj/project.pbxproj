@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22298B172D2450BC008ECB45 /* URLSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22298B162D2450BC008ECB45 /* URLSession+Extensions.swift */; };
 		227CA4312D230C2700D967C5 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA4132D230C2700D967C5 /* DatabaseManager.swift */; };
 		227CA4322D230C2700D967C5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA4142D230C2700D967C5 /* NetworkManager.swift */; };
 		227CA4332D230C2700D967C5 /* RSSParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA4152D230C2700D967C5 /* RSSParserDelegate.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		22298B162D2450BC008ECB45 /* URLSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extensions.swift"; sourceTree = "<group>"; };
 		227CA4132D230C2700D967C5 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		227CA4142D230C2700D967C5 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		227CA4152D230C2700D967C5 /* RSSParserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSParserDelegate.swift; sourceTree = "<group>"; };
@@ -50,6 +52,8 @@
 		227CA42D2D230C2700D967C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		227CA42E2D230C2700D967C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		227CA42F2D230C2700D967C5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		227CA4462D23137800D967C5 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		227CA4482D23137800D967C5 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22EFD9AD2D18A6D900E8B1AF /* NewsParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		577A6B1F0D96FE9FC7F74970 /* Pods-NewsParser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsParser.release.xcconfig"; path = "Target Support Files/Pods-NewsParser/Pods-NewsParser.release.xcconfig"; sourceTree = "<group>"; };
 		616DE3B8062CC4402626EE7C /* Pods_NewsParser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsParser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +72,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22298B152D24508E008ECB45 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				22298B162D2450BC008ECB45 /* URLSession+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		227CA4182D230C2700D967C5 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +165,7 @@
 		227CA4302D230C2700D967C5 /* NewsParser */ = {
 			isa = PBXGroup;
 			children = (
+				22298B152D24508E008ECB45 /* Extensions */,
 				227CA4182D230C2700D967C5 /* Managers */,
 				227CA41B2D230C2700D967C5 /* Models */,
 				227CA41D2D230C2700D967C5 /* Protocols */,
@@ -191,13 +204,14 @@
 				A3FF48DC207038B6965543D6 /* Pods-NewsParser.debug.xcconfig */,
 				577A6B1F0D96FE9FC7F74970 /* Pods-NewsParser.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
 		E59CDB469CD377F319C1330E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				227CA4462D23137800D967C5 /* Realm.framework */,
+				227CA4482D23137800D967C5 /* RealmSwift.framework */,
 				616DE3B8062CC4402626EE7C /* Pods_NewsParser.framework */,
 			);
 			name = Frameworks;
@@ -324,6 +338,7 @@
 				227CA4352D230C2700D967C5 /* Utils.swift in Sources */,
 				227CA4362D230C2700D967C5 /* NewsSource.swift in Sources */,
 				227CA4372D230C2700D967C5 /* RSSItem.swift in Sources */,
+				22298B172D2450BC008ECB45 /* URLSession+Extensions.swift in Sources */,
 				227CA4382D230C2700D967C5 /* NewsListViewControllerDelegate.swift in Sources */,
 				227CA4392D230C2700D967C5 /* NewsDetailsViewController.swift in Sources */,
 				227CA43A2D230C2700D967C5 /* NewsListViewController.swift in Sources */,
@@ -350,6 +365,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RFXP49RW3F;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NewsParser/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -380,6 +396,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RFXP49RW3F;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NewsParser/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
