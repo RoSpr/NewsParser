@@ -17,7 +17,7 @@ protocol NewsListViewControllerViewModel {
     
     func itemAtIndex(indexPath: IndexPath) -> RSSItemRaw
     
-    func startFetchingIfNeeded() async
+    func startFetchingIfNeeded()
 }
 
 final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel {
@@ -44,44 +44,47 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
         return newsSources[indexPath.row]
     }
     
-    func startFetchingIfNeeded() async {
-        await withCheckedContinuation { continuation in
-            queue.async {
-                let newsSources = DatabaseManager.shared.fetch(NewsSource.self)
-
-                for newsSource in newsSources {
-                    let existingLinks = Set(newsSource.news.map { $0.link })
-                    let stringURL = newsSource.stringURL
-
-                    do {
-                        let items = try RSSParserManager().fetchAndParseRSS(from: stringURL)
-                            .filter { !existingLinks.contains($0.link) }
-
-                        if items.count > 0 {
-                            DatabaseManager.shared.update {
-                                if newsSource.name == nil {
-                                    newsSource.name = items.first?.sourceTitle
+    func startFetchingIfNeeded() {
+        Task {
+            await withCheckedContinuation { continuation in
+                queue.async {
+                    let newsSources = DatabaseManager.shared.fetch(NewsSource.self)
+                    
+                    for newsSource in newsSources {
+                        let existingLinks = Set(newsSource.news.map { $0.link })
+                        let stringURL = newsSource.stringURL
+                        
+                        do {
+                            let items = try RSSParserManager().fetchAndParseRSS(from: stringURL)
+                                .filter { !existingLinks.contains($0.link) }
+                            
+                            if items.count > 0 {
+                                DatabaseManager.shared.update {
+                                    if newsSource.name == nil {
+                                        newsSource.name = items.first?.sourceTitle
+                                    }
+                                    
+                                    let sortedItems = items.sorted { $0.pubDate > $1.pubDate }
+                                    
+                                    newsSource.news.insert(contentsOf: sortedItems.map {
+                                        let realmRSS = RSSItem()
+                                        realmRSS.newsDescription = $0.description
+                                        realmRSS.sourceTitle = $0.sourceTitle
+                                        realmRSS.title = $0.title
+                                        realmRSS.imageLink = $0.imageLink
+                                        realmRSS.pubDate = $0.pubDate
+                                        realmRSS.link = $0.link
+                                        
+                                        return realmRSS
+                                    }, at: 0)
                                 }
-                                
-                                let sortedItems = items.sorted { $0.pubDate > $1.pubDate }
-
-                                newsSource.news.insert(contentsOf: sortedItems.map {
-                                    let realmRSS = RSSItem()
-                                    realmRSS.newsDescription = $0.description
-                                    realmRSS.sourceTitle = $0.sourceTitle
-                                    realmRSS.title = $0.title
-                                    realmRSS.imageLink = $0.imageLink
-                                    realmRSS.pubDate = $0.pubDate
-                                    realmRSS.link = $0.link
-                                    return realmRSS
-                                }, at: 0)
                             }
+                        } catch {
+                            print("Error during parsing RSS items: \(error)")
                         }
-                    } catch {
-                        print("Error during parsing RSS items: \(error)")
                     }
+                    continuation.resume()
                 }
-                continuation.resume()
             }
         }
     }
