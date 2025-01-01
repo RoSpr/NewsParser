@@ -137,4 +137,14 @@ extension NewsListViewController: NewsListViewControllerDelegate {
             self?.tableView.reloadData()
         }
     }
+    
+    func tableViewUpdated(insertions: [Int], deletions: [Int], updates: [Int]) {
+        let insertedIndexPaths = insertions.map { IndexPath(row: $0, section: 0) }
+        let updatedIndexPaths = updates.map { IndexPath(row: $0, section: 0) }
+        
+        tableView.performBatchUpdates { [weak self] in
+            self?.tableView.insertRows(at: insertedIndexPaths, with: .automatic)
+            self?.tableView.reloadRows(at: updatedIndexPaths, with: .automatic)
+        }
+    }
 }

@@ -9,4 +9,5 @@ import Foundation
 
 protocol NewsListViewControllerDelegate: AnyObject {
     func reloadData()
+    func tableViewUpdated(insertions: [Int], deletions: [Int], updates: [Int])
 }

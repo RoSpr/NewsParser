@@ -12,6 +12,8 @@ final class DatabaseManager {
     static let shared = DatabaseManager()
 
     private init() {}
+    
+    private var notificationTokens: [NotificationToken] = []
 
     func getRealmInstance() -> Realm {
         do {
@@ -70,6 +72,23 @@ final class DatabaseManager {
         } catch {
             print("Error deleting all objects from Realm: \(error)")
         }
+    }
+    
+    func observeChanges<T: Object>(for type: T.Type, id: String? = nil, onChange: @escaping (RealmCollectionChange<Results<T>>) -> Void) {
+        let realm = getRealmInstance()
+        var results: Results<T>
+
+        if let id = id {
+            results = realm.objects(type).filter("id == %@", id)
+        } else {
+            results = realm.objects(type)
+        }
+
+        let notificationToken = results.observe { changes in
+            onChange(changes)
+        }
+        
+        notificationTokens.append(notificationToken)
     }
     
     func fetchActiveNewsSources() -> [NewsSource] {
