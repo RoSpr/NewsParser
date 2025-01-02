@@ -92,7 +92,7 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
     private func fetchSavedRSSItems() {
         let savedRSSItems = DatabaseManager.shared.fetchActiveRSSItemsRealm()
         let rssRawItems = savedRSSItems.map {
-            RSSItemRaw(realmId: $0.id, sourceTitle: $0.sourceTitle, title: $0.title, link: $0.link, imageLink: $0.imageLink, description: $0.newsDescription, pubDate: $0.pubDate)
+            RSSItemRaw(realmId: $0.id, sourceTitle: $0.sourceTitle, title: $0.title, link: $0.link, imageLink: $0.imageLink, description: $0.newsDescription, pubDate: $0.pubDate, isRead: $0.isRead, isImageDownloaded: $0.isImageDownloaded)
         }
         newsSources.append(contentsOf: rssRawItems)
         newsSources.sort(by: { $0.pubDate > $1.pubDate })
@@ -109,7 +109,16 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
             case .update(let allElements, deletions: _, insertions: let insertions, modifications: let updates):
                 let newElements = insertions.map {
                     let rssItem = allElements[$0]
-                    return RSSItemRaw(sourceTitle: rssItem.sourceTitle, title: rssItem.title, link: rssItem.link, pubDate: rssItem.pubDate)
+                    return RSSItemRaw(realmId: rssItem.id, sourceTitle: rssItem.sourceTitle, title: rssItem.title, link: rssItem.link, pubDate: rssItem.pubDate, isRead: rssItem.isRead, isImageDownloaded: rssItem.isImageDownloaded)
+                }
+                
+                updates.forEach {
+                    let item = allElements[$0]
+                    if let index = self.newsSources.firstIndex(where: { $0.realmId == item.id }) {
+                        var rawItem = self.newsSources[index]
+                        rawItem.isRead = item.isRead
+                        self.newsSources[index] = rawItem
+                    }
                 }
                 
                 self.newsSources.insert(contentsOf: newElements, at: 0)
