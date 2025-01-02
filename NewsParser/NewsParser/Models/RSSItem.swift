@@ -17,6 +17,7 @@ class RSSItem: Object {
     @Persisted var newsDescription: String?
     @Persisted var pubDate: Date
     @Persisted var isRead: Bool = false
+    @Persisted var isImageDownloaded: Bool = false
     
     override static func primaryKey() -> String? {
         return "id"
@@ -24,10 +25,13 @@ class RSSItem: Object {
 }
 
 struct RSSItemRaw {
+    var realmId: String?
     var sourceTitle: String
     var title: String
     var link: String
     var imageLink: String?
     var description: String?
     var pubDate: Date
+    var isRead: Bool
+    var isImageDownloaded: Bool
 }

@@ -41,7 +41,7 @@ class RSSParserDelegate: NSObject, XMLParserDelegate {
                 let description = currentItem?["description"]
                 let imageLink = currentItem?["imageLink"]
                 
-                onItemParsed(RSSItemRaw(sourceTitle: sourceTitle ?? "Unknown", title: title, link: link, imageLink: imageLink, description: description, pubDate: pubDate))
+                onItemParsed(RSSItemRaw(sourceTitle: sourceTitle ?? "Unknown", title: title, link: link, imageLink: imageLink, description: description, pubDate: pubDate, isRead: false, isImageDownloaded: false))
             }
             currentItem = nil
         } else if elementName == "title" && sourceTitle == nil {

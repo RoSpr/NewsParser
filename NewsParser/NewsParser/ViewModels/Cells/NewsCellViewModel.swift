@@ -11,7 +11,6 @@ import UIKit
 protocol NewsCellViewModel {
     var image: UIImage? { get }
     var hasImage: Bool { get }
-    var downloadedImageURL: URL? { get set }
     var newsHeader: String { get }
     var newsSource: String { get }
     var newsDate: String? { get }
@@ -19,27 +18,29 @@ protocol NewsCellViewModel {
 }
 
 final class NewsCellViewModelImpl: NewsCellViewModel {
-    var image: UIImage? {
-        if let url = downloadedImageURL {
-            return UIImage(contentsOfFile: url.path)
-        } else {
-            return nil
-        }
-    }
+    private let realmId: String
+    
+    lazy var image: UIImage? = ImageCacheManager.shared.fetchImage(for: realmId)
     
     let hasImage: Bool
-    var downloadedImageURL: URL? = nil
-    
     let newsHeader: String
     let newsSource: String
     let newsDate: String?
-    var isRead: Bool
+    var isRead: Bool {
+        didSet {
+            DatabaseManager.shared.update {
+                let rssItem = DatabaseManager.shared.fetch(RSSItem.self, predicate: NSPredicate(format: "id == %@", realmId))
+                rssItem.first?.isRead = isRead
+            }
+        }
+    }
     
-    init(newsHeader: String, newsSource: String, date: Date, hasImage: Bool) {
+    init(realmId: String, newsHeader: String, newsSource: String, date: Date, hasImage: Bool, isRead: Bool) {
+        self.realmId = realmId
         self.hasImage = hasImage
         self.newsHeader = newsHeader
         self.newsSource = newsSource
         self.newsDate = Utils.getStringFromDate(date)
-        self.isRead = false
+        self.isRead = isRead
     }
 }

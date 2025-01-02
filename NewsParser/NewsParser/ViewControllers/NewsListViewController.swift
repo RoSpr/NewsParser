@@ -79,7 +79,9 @@ final class NewsListViewController: UIViewController {
 extension NewsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
-        cell?.viewModel?.isRead = true
+        if cell?.viewModel?.isRead == false {
+            cell?.viewModel?.isRead = true
+        }
         tableView.deselectRow(at: indexPath, animated: false)
         
         let newsDetailViewController = NewsDetailsViewController()
@@ -106,20 +108,31 @@ extension NewsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier,
                                                        for: indexPath) as? NewsTableViewCell,
-              let rssItem = viewModel?.itemAtIndex(indexPath: indexPath) else {
+              let rssItem = viewModel?.itemAtIndex(indexPath: indexPath),
+              let realmId = rssItem.realmId else {
+            print("Failed to get cell, rssItem at index, or realmId")
             return UITableViewCell(style: .default, reuseIdentifier: nil)
         }
         
-        cell.viewModel = NewsCellViewModelImpl(newsHeader: rssItem.title,
+        cell.viewModel = NewsCellViewModelImpl(realmId: realmId,
+                                               newsHeader: rssItem.title,
                                                newsSource: rssItem.sourceTitle,
                                                date: rssItem.pubDate,
-                                               hasImage: rssItem.imageLink != nil)
+                                               hasImage: rssItem.imageLink != nil,
+                                               isRead: rssItem.isRead)
         
-        if let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
+        if !rssItem.isImageDownloaded, let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
             viewModel?.networkManager.downloadContent(from: url, completion: { localURL, error in
                 if let localURL = localURL, let data = try? Data(contentsOf: localURL), let image = UIImage(data: data) {
+                    ImageCacheManager.shared.saveToDisk(image: image, forKey: realmId)
+                    
+                    if let savedItem = DatabaseManager.shared.fetch(RSSItem.self, predicate: NSPredicate(format: "id == %@", realmId)).first {
+                        DatabaseManager.shared.update {
+                            savedItem.isImageDownloaded = true
+                        }
+                    }
+                    
                     cell.downloadCompletedHandler(image)
-                    cell.viewModel?.downloadedImageURL = localURL
                 } else if let error = error {
                     print("Failed to download image: \(error)")
                 }
