@@ -11,6 +11,8 @@ import UIKit
 final class NewsListViewController: UIViewController {
     var viewModel: NewsListViewControllerViewModel?
     
+    private let queue = DispatchQueue(label: "com.newsParser.newsListViewControllerQueue", attributes: .concurrent)
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -122,19 +124,21 @@ extension NewsListViewController: UITableViewDataSource {
                                                isRead: rssItem.isRead)
         
         if !rssItem.isImageDownloaded, let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
-            viewModel?.networkManager.downloadContent(from: url, completion: { localURL, error in
-                if let localURL = localURL, let data = try? Data(contentsOf: localURL), let image = UIImage(data: data) {
-                    ImageCacheManager.shared.saveToDisk(image: image, forKey: realmId)
-                    
-                    if let savedItem = DatabaseManager.shared.fetch(RSSItem.self, predicate: NSPredicate(format: "id == %@", realmId)).first {
-                        DatabaseManager.shared.update {
-                            savedItem.isImageDownloaded = true
+            viewModel?.networkManager.downloadContent(from: url, completion: { [weak self] localURL, error in
+                self?.queue.async {
+                    if let localURL = localURL, let data = try? Data(contentsOf: localURL), let image = UIImage(data: data) {
+                        ImageCacheManager.shared.saveToDisk(image: image, forKey: realmId)
+                        
+                        if let savedItem = DatabaseManager.shared.fetch(RSSItem.self, predicate: NSPredicate(format: "id == %@", realmId)).first {
+                            DatabaseManager.shared.update {
+                                savedItem.isImageDownloaded = true
+                            }
                         }
+                        
+                        cell.downloadCompletedHandler(image)
+                    } else if let error = error {
+                        print("Failed to download image: \(error)")
                     }
-                    
-                    cell.downloadCompletedHandler(image)
-                } else if let error = error {
-                    print("Failed to download image: \(error)")
                 }
             }, progressUpdate: cell.downloadProgressHandler)
         }
@@ -152,12 +156,14 @@ extension NewsListViewController: NewsListViewControllerDelegate {
     }
     
     func tableViewUpdated(insertions: [Int], deletions: [Int], updates: [Int]) {
-        let insertedIndexPaths = insertions.map { IndexPath(row: $0, section: 0) }
-        let updatedIndexPaths = updates.map { IndexPath(row: $0, section: 0) }
-        
-        tableView.performBatchUpdates { [weak self] in
-            self?.tableView.insertRows(at: insertedIndexPaths, with: .automatic)
-            self?.tableView.reloadRows(at: updatedIndexPaths, with: .automatic)
+        DispatchQueue.main.async { [weak self] in
+            let insertedIndexPaths = insertions.map { IndexPath(row: $0, section: 0) }
+            let updatedIndexPaths = updates.map { IndexPath(row: $0, section: 0) }
+            
+            self?.tableView.performBatchUpdates { [weak self] in
+                self?.tableView.insertRows(at: insertedIndexPaths, with: .automatic)
+                self?.tableView.reloadRows(at: updatedIndexPaths, with: .automatic)
+            }
         }
     }
 }
