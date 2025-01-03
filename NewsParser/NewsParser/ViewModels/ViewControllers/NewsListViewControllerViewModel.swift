@@ -109,7 +109,7 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
             case .update(let allElements, deletions: _, insertions: let insertions, modifications: let updates):
                 let newElements = insertions.map {
                     let rssItem = allElements[$0]
-                    return RSSItemRaw(realmId: rssItem.id, sourceTitle: rssItem.sourceTitle, title: rssItem.title, link: rssItem.link, pubDate: rssItem.pubDate, isRead: rssItem.isRead, isImageDownloaded: rssItem.isImageDownloaded)
+                    return RSSItemRaw(realmId: rssItem.id, sourceTitle: rssItem.sourceTitle, title: rssItem.title, link: rssItem.link, imageLink: rssItem.imageLink, description: rssItem.newsDescription, pubDate: rssItem.pubDate, isRead: rssItem.isRead, isImageDownloaded: rssItem.isImageDownloaded)
                 }
                 
                 updates.forEach {
