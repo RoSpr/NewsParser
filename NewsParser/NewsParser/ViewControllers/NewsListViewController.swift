@@ -111,8 +111,9 @@ extension NewsListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier,
                                                        for: indexPath) as? NewsTableViewCell,
               let rssItem = viewModel?.itemAtIndex(indexPath: indexPath),
-              let realmId = rssItem.realmId else {
-            print("Failed to get cell, rssItem at index, or realmId")
+              let realmId = rssItem.realmId,
+              let viewModel = viewModel else {
+            print("Failed to get cell, rssItem at index, realmId, or viewModel")
             return UITableViewCell(style: .default, reuseIdentifier: nil)
         }
         
@@ -123,8 +124,8 @@ extension NewsListViewController: UITableViewDataSource {
                                                hasImage: rssItem.imageLink != nil,
                                                isRead: rssItem.isRead)
         
-        if !rssItem.isImageDownloaded, let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
-            viewModel?.networkManager.downloadContent(from: url, completion: { [weak self] localURL, error in
+        if !rssItem.isImageDownloaded, viewModel.shouldDownload(id: realmId), let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
+            viewModel.networkManager.downloadContent(from: url, completion: { [weak self] localURL, error in
                 self?.queue.async {
                     if let localURL = localURL, let data = try? Data(contentsOf: localURL), let image = UIImage(data: data) {
                         ImageCacheManager.shared.saveToDisk(image: image, forKey: realmId)
@@ -136,6 +137,11 @@ extension NewsListViewController: UITableViewDataSource {
                         }
                         
                         cell.downloadCompletedHandler(image)
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                        }
                     } else if let error = error {
                         print("Failed to download image: \(error)")
                     }

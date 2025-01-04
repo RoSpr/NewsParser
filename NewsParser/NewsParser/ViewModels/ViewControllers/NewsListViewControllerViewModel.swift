@@ -18,12 +18,14 @@ protocol NewsListViewControllerViewModel {
     func itemAtIndex(indexPath: IndexPath) -> RSSItemRaw
     
     func startFetchingIfNeeded()
+    func shouldDownload(id: String) -> Bool
 }
 
 final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel {
     private let queue: DispatchQueue = DispatchQueue(label: "com.newsListViewModel.queue", attributes: .concurrent)
     
     private var newsSources: [RSSItemRaw] = []
+    private var downloadingIds: Set<String> = []
     
     init() {
         fetchSavedRSSItems()
@@ -89,6 +91,14 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
         }
     }
     
+    func shouldDownload(id: String) -> Bool {
+        guard downloadingIds.contains(id) else {
+            downloadingIds.insert(id)
+            return true
+        }
+        return false
+    }
+    
     private func fetchSavedRSSItems() {
         let savedRSSItems = DatabaseManager.shared.fetchActiveRSSItemsRealm()
         let rssRawItems = savedRSSItems.map {
@@ -117,13 +127,19 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
                     if let index = self.newsSources.firstIndex(where: { $0.realmId == item.id }) {
                         var rawItem = self.newsSources[index]
                         rawItem.isRead = item.isRead
+                        rawItem.isImageDownloaded = item.isImageDownloaded
                         self.newsSources[index] = rawItem
                     }
                 }
                 
                 self.newsSources.insert(contentsOf: newElements, at: 0)
                 self.newsSources.sort(by: { $0.pubDate > $1.pubDate })
-                self.delegate?.tableViewUpdated(insertions: insertions, deletions: [], updates: updates)
+                
+                let sortedInsertions = newElements.compactMap { newItem in
+                    self.newsSources.firstIndex(where: { $0.realmId == newItem.realmId })
+                }
+                
+                self.delegate?.tableViewUpdated(insertions: sortedInsertions, deletions: [], updates: updates)
             case .error(let error):
                 print("Error in Realm observer: \(error)")
             }
