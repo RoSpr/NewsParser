@@ -53,6 +53,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let newsNavigationController = UINavigationController(rootViewController: newsListViewController)
         newsNavigationController.tabBarItem = UITabBarItem(title: "Новости", image: UIImage(systemName: "newspaper"), tag: 0)
         
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .light) // Adjust the blur style as needed
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+
+        newsNavigationController.navigationBar.standardAppearance = appearance
+        newsNavigationController.navigationBar.scrollEdgeAppearance = appearance
+        
         return newsNavigationController
     }
     
