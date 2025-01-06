@@ -15,12 +15,15 @@ protocol NewsCellViewModel {
     var newsSource: String { get }
     var newsDate: String? { get }
     var isRead: Bool { get set }
+    var downloadProgress: Double { get set }
 }
 
 final class NewsCellViewModelImpl: NewsCellViewModel {
     private let realmId: String
     
     lazy var image: UIImage? = ImageCacheManager.shared.fetchImage(for: realmId)
+    
+    var downloadProgress: Double = 0
     
     let hasImage: Bool
     let newsHeader: String

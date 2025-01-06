@@ -94,6 +94,7 @@ extension NewsListViewController: UITableViewDelegate {
             newsDetailViewController.viewModel = newsDetailViewModel
             
             if let realmId = newsDetailViewModel.realmId, image == nil, viewModel.isDownloadInProgress(id: realmId) {
+                newsDetailViewController.setInitialDownloadProgress(cell?.viewModel?.downloadProgress)
                 viewModel.networkManager.addProgressObservers(progressObserver: newsDetailViewController.downloadProgressHandler, completionObserver: nil, realmId: realmId)
             }
         }

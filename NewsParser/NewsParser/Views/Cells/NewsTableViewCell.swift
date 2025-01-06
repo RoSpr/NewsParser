@@ -19,6 +19,7 @@ final class NewsTableViewCell: UITableViewCell {
     
     private(set) lazy var downloadProgressHandler: ((Double) -> Void) = { [weak self] progress in
         guard let self = self else { return }
+        viewModel?.downloadProgress = progress
         DispatchQueue.main.async {
             self.downloadProgressView.setProgress(progress, animated: true)
         }
