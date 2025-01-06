@@ -88,9 +88,14 @@ extension NewsListViewController: UITableViewDelegate {
         
         let newsDetailViewController = NewsDetailsViewController()
         if let viewModel = viewModel {
+            let image = cell?.viewModel?.image
+            
             let newsDetailViewModel = NewsDetailsViewControllerViewModelImpl(item: viewModel.itemAtIndex(indexPath: indexPath))
-            newsDetailViewModel.image = cell?.viewModel?.image
             newsDetailViewController.viewModel = newsDetailViewModel
+            
+            if let realmId = newsDetailViewModel.realmId, image == nil, viewModel.isDownloadInProgress(id: realmId) {
+                viewModel.networkManager.addProgressObservers(progressObserver: newsDetailViewController.downloadProgressHandler, completionObserver: nil, realmId: realmId)
+            }
         }
         
         navigationController?.pushViewController(newsDetailViewController, animated: true)
@@ -125,7 +130,7 @@ extension NewsListViewController: UITableViewDataSource {
                                                isRead: rssItem.isRead)
         
         if !rssItem.isImageDownloaded, viewModel.shouldDownload(id: realmId), let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
-            viewModel.networkManager.downloadContent(from: url, completion: { [weak self] localURL, error in
+            viewModel.networkManager.downloadContent(from: url, realmId: realmId, completion: { [weak self] localURL, error in
                 self?.queue.async {
                     if let localURL = localURL, let data = try? Data(contentsOf: localURL), let image = UIImage(data: data) {
                         ImageCacheManager.shared.saveToDisk(image: image, forKey: realmId)

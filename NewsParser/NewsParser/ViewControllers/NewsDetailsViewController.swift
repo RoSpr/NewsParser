@@ -44,6 +44,7 @@ final class NewsDetailsViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.isHidden = true
+        imageView.backgroundColor = UIColor(white: 0.3, alpha: 0.3)
         
         return imageView
     }()
@@ -81,6 +82,14 @@ final class NewsDetailsViewController: UIViewController {
         return textView
     }()
     
+    private let downloadProgressView: CircularProgressBarView = {
+        let progressView = CircularProgressBarView()
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.isHidden = true
+        
+        return progressView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,13 +98,23 @@ final class NewsDetailsViewController: UIViewController {
         addSubviews()
         setupConstraints()
         configure()
+        
+        setupNotificationObservers()
+    }
+    
+    // Set value the same as it is in the other progress view
+    private(set) lazy var downloadProgressHandler: ((Double) -> Void) = { [weak self] progress in
+        guard let self = self else { return }
+        DispatchQueue.main.async {
+            self.downloadProgressView.setProgress(progress, animated: true)
+        }
     }
     
     private func addSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(scrollContentView)
         
-        [newsTitleLabel, imageView, sourceTitleLabel, dateLabel, textView].forEach {
+        [newsTitleLabel, imageView, sourceTitleLabel, dateLabel, textView, downloadProgressView].forEach {
             scrollContentView.addSubview($0)
         }
     }
@@ -124,6 +143,11 @@ final class NewsDetailsViewController: UIViewController {
             imageView.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor, constant: -48),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.8),
             
+            downloadProgressView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            downloadProgressView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            downloadProgressView.widthAnchor.constraint(equalToConstant: 45),
+            downloadProgressView.heightAnchor.constraint(equalTo: downloadProgressView.widthAnchor),
+            
             sourceTitleLabel.leftAnchor.constraint(equalTo: scrollContentView.leftAnchor, constant: 16),
             sourceTitleLabel.widthAnchor.constraint(equalTo: dateLabel.widthAnchor),
             
@@ -149,18 +173,46 @@ final class NewsDetailsViewController: UIViewController {
         
         if viewModel.hasImage {
             imageView.isHidden = false
-            imageView.image = viewModel.image
+            
+            if let image = viewModel.image {
+                downloadProgressView.isHidden = true
+                imageView.backgroundColor = .clear
+                imageView.image = image
+            } else {
+                downloadProgressView.isHidden = false
+            }
         }
         
         sourceTitleLabel.text = viewModel.sourceTitle
         dateLabel.text = viewModel.pubDate
         textView.text = viewModel.description
-        
     }
     
     private func activateTopConstraint(hasImage: Bool) {
         topLabelsTopConstraintToImageView.isActive = hasImage
         topLabelsTopContraintToTop.isActive = !hasImage
+    }
+    
+    private func setupNotificationObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishImageDownload), name: .didFinishImageDownload, object: nil)
+    }
+    
+    @objc private func didFinishImageDownload(_ notification: Notification) {
+        guard let viewModel = viewModel,
+              let realmId = viewModel.realmId,
+              realmId == notification.userInfo?["realmId"] as? String else { return }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.downloadProgressView.isHidden = true
+            self.imageView.backgroundColor = .clear
+            self.imageView.image = self.viewModel?.image
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 

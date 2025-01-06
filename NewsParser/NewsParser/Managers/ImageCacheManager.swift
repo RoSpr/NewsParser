@@ -51,6 +51,8 @@ class ImageCacheManager {
             if let filePath = self.cacheDirectory?.appendingPathComponent(key) {
                 do {
                     try data.write(to: filePath)
+                    
+                    NotificationCenter.default.post(name: .didFinishImageDownload, object: nil, userInfo: ["realmId": key])
                 } catch {
                     print("Error saving image data to the file: \(error)")
                 }
@@ -58,7 +60,9 @@ class ImageCacheManager {
         }
     }
     
-    func fetchImage(for id: String) -> UIImage? {
+    func fetchImage(for id: String?) -> UIImage? {
+        guard let id = id else { return nil }
+        
         if let cachedImage = self.memoryCache.object(forKey: id as NSString) {
             return cachedImage
         } else if let diskImage = self.loadFromDisk(forKey: id) {

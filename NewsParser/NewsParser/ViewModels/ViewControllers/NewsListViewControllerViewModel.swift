@@ -19,6 +19,7 @@ protocol NewsListViewControllerViewModel {
     
     func startFetchingIfNeeded()
     func shouldDownload(id: String) -> Bool
+    func isDownloadInProgress(id: String) -> Bool
 }
 
 final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel {
@@ -97,6 +98,10 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
             return true
         }
         return false
+    }
+    
+    func isDownloadInProgress(id: String) -> Bool {
+        return downloadingIds.contains(id)
     }
     
     private func fetchSavedRSSItems() {

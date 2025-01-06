@@ -15,6 +15,7 @@ protocol NewsDetailsViewControllerViewModel {
     var hasImage: Bool { get }
     var image: UIImage? { get }
     var pubDate: String? { get }
+    var realmId: String? { get }
 }
 
 final class NewsDetailsViewControllerViewModelImpl: NewsDetailsViewControllerViewModel {
@@ -36,7 +37,13 @@ final class NewsDetailsViewControllerViewModelImpl: NewsDetailsViewControllerVie
         rssItem.imageLink != nil
     }
     
-    var image: UIImage? = nil
+    var realmId: String? {
+        rssItem.realmId
+    }
+    
+    var image: UIImage? {
+        ImageCacheManager.shared.fetchImage(for: self.realmId)
+    }
     
     var pubDate: String? {
         Utils.getStringFromDate(rssItem.pubDate)
@@ -44,12 +51,5 @@ final class NewsDetailsViewControllerViewModelImpl: NewsDetailsViewControllerVie
     
     init(item: RSSItemRaw) {
         self.rssItem = item
-        
-        startImageDownloadIfNeeded()
-    }
-    
-    private func startImageDownloadIfNeeded() {
-        guard let urlString = rssItem.imageLink else { return }
-        
     }
 }
