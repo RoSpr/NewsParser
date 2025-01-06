@@ -13,7 +13,13 @@ protocol NetworkManagerProtocol {
 }
 
 final class NetworkManager: NSObject, NetworkManagerProtocol {
-    private let downloadQueue = OperationQueue()
+    private let downloadQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 10
+        
+        return queue
+    }()
+    
     private let urlSession = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
     private var downloadObservations: [Int: NSKeyValueObservation] = [:]
     
