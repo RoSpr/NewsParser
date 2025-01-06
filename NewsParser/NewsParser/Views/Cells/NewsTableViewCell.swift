@@ -166,21 +166,25 @@ final class NewsTableViewCell: UITableViewCell {
     private func configure() {
         guard let viewModel = viewModel else { return }
         
-        if let image = viewModel.image {
-            newsImageView.isHidden = false
-            newsImageView.image = image
-            downloadProgressView.isHidden = true
-        } else if viewModel.hasImage && viewModel.image == nil {
-            downloadProgressView.isHidden = false
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            if let image = viewModel.image {
+                self.newsImageView.isHidden = false
+                self.newsImageView.image = image
+                self.downloadProgressView.isHidden = true
+            } else if viewModel.hasImage && viewModel.image == nil {
+                self.downloadProgressView.isHidden = false
+            }
+            
+            self.setupLabelsLeftConstraints(hasImage: viewModel.hasImage)
+            
+            self.newsHeaderLabel.text = viewModel.newsHeader
+            self.newsSourceLabel.text = viewModel.newsSource
+            self.dateLabel.text = viewModel.newsDate
+            
+            self.isReadImageView.tintColor = viewModel.isRead ? .systemGreen : .systemGray
         }
-        
-        setupLabelsLeftConstraints(hasImage: viewModel.hasImage)
-        
-        newsHeaderLabel.text = viewModel.newsHeader
-        newsSourceLabel.text = viewModel.newsSource
-        dateLabel.text = viewModel.newsDate
-        
-        isReadImageView.tintColor = viewModel.isRead ? .systemGreen : .systemGray
     }
     
     private func setupLabelsLeftConstraints(hasImage: Bool) {
