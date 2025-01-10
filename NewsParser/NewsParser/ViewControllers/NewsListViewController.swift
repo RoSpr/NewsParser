@@ -33,6 +33,8 @@ final class NewsListViewController: UIViewController {
         
         viewModel?.delegate = self
         viewModel?.startFetchingIfNeeded()
+        
+        self.tabBarController?.delegate = self
     }
 
     private func addSubviews() {
@@ -177,5 +179,16 @@ extension NewsListViewController: NewsListViewControllerDelegate {
                 self?.tableView.reloadRows(at: updatedIndexPaths, with: .automatic)
             }
         }
+    }
+}
+
+//MARK: - UITabBarControllerDelegate
+extension NewsListViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        guard let navController = viewController as? UINavigationController,
+              navController.tabBarItem.tag == 0,
+              self.view.window != nil else { return }
+        
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
 }
