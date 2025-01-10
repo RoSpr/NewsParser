@@ -11,11 +11,7 @@ import UIKit
 final class NewsTableViewCell: UITableViewCell {
     static let identifier: String = "NewsTableViewCell"
     
-    var viewModel: NewsCellViewModel? = nil {
-        didSet {
-            self.configure()
-        }
-    }
+    private(set) var viewModel: NewsCellViewModel? = nil
     
     private(set) lazy var downloadProgressHandler: ((Double) -> Void) = { [weak self] progress in
         guard let self = self else { return }
@@ -98,7 +94,7 @@ final class NewsTableViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var newsHeaderLeftToCellConstraint: NSLayoutConstraint = newsHeaderLabel.leftAnchor.constraint(equalTo: isReadImageView.rightAnchor, constant: 12)
+    private lazy var newsHeaderLeftToCellConstraint: NSLayoutConstraint = newsHeaderLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12)
     private lazy var newsHeaderLeftToImageViewConstraint: NSLayoutConstraint = newsHeaderLabel.leftAnchor.constraint(equalTo: newsImageView.rightAnchor, constant: 12)
     
     convenience init(viewModel: NewsCellViewModel) {
@@ -133,13 +129,8 @@ final class NewsTableViewCell: UITableViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            isReadImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
-            isReadImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            isReadImageView.heightAnchor.constraint(equalToConstant: 16),
-            isReadImageView.widthAnchor.constraint(equalToConstant: 16),
-            
             newsImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            newsImageView.leftAnchor.constraint(equalTo: isReadImageView.rightAnchor, constant: 12),
+            newsImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
             newsImageView.heightAnchor.constraint(equalToConstant: 50),
             newsImageView.widthAnchor.constraint(equalTo: newsImageView.heightAnchor),
             
@@ -151,7 +142,12 @@ final class NewsTableViewCell: UITableViewCell {
             newsHeaderLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             newsHeaderLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12),
             
-            newsSourceLabel.leftAnchor.constraint(equalTo: newsHeaderLabel.leftAnchor),
+            isReadImageView.leftAnchor.constraint(equalTo: newsHeaderLabel.leftAnchor),
+            isReadImageView.centerYAnchor.constraint(equalTo: newsSourceLabel.centerYAnchor),
+            isReadImageView.widthAnchor.constraint(equalToConstant: 12),
+            isReadImageView.heightAnchor.constraint(equalToConstant: 12),
+            
+            newsSourceLabel.leftAnchor.constraint(equalTo: isReadImageView.rightAnchor, constant: 4),
             newsSourceLabel.topAnchor.constraint(equalTo: newsHeaderLabel.bottomAnchor, constant: 4),
             newsSourceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
@@ -180,12 +176,16 @@ final class NewsTableViewCell: UITableViewCell {
         self.newsSourceLabel.text = viewModel.newsSource
         self.dateLabel.text = viewModel.newsDate
         
-        self.isReadImageView.tintColor = viewModel.isRead ? .systemGreen : .systemGray
+        self.setIsReadTintColor(isRead: viewModel.isRead)
     }
     
     private func setupLabelsLeftConstraints(hasImage: Bool) {
         newsHeaderLeftToImageViewConstraint.isActive = hasImage
         newsHeaderLeftToCellConstraint.isActive = !hasImage
+    }
+    
+    private func setIsReadTintColor(isRead: Bool) {
+        self.isReadImageView.tintColor = isRead ? .systemGreen : .systemGray
     }
     
     override func prepareForReuse() {
@@ -200,6 +200,17 @@ final class NewsTableViewCell: UITableViewCell {
         newsSourceLabel.text = nil
         dateLabel.text = nil
         isReadImageView.tintColor = .systemGray
-        setupLabelsLeftConstraints(hasImage: false)
+        newsHeaderLeftToCellConstraint.isActive = false
+        newsHeaderLeftToImageViewConstraint.isActive = false
+    }
+    
+    func set(viewModel: NewsCellViewModel) {
+        self.viewModel = viewModel
+        self.configure()
+    }
+    
+    func wasRead() {
+        self.setIsReadTintColor(isRead: true)
+        self.viewModel?.isRead = true
     }
 }

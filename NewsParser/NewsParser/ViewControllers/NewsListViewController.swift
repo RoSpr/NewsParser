@@ -84,7 +84,7 @@ extension NewsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
         if cell?.viewModel?.isRead == false {
-            cell?.viewModel?.isRead = true
+            cell?.wasRead()
         }
         tableView.deselectRow(at: indexPath, animated: false)
         
@@ -125,12 +125,13 @@ extension NewsListViewController: UITableViewDataSource {
             return UITableViewCell(style: .default, reuseIdentifier: nil)
         }
         
-        cell.viewModel = NewsCellViewModelImpl(realmId: realmId,
-                                               newsHeader: rssItem.title,
-                                               newsSource: rssItem.sourceTitle,
-                                               date: rssItem.pubDate,
-                                               hasImage: rssItem.imageLink != nil,
-                                               isRead: rssItem.isRead)
+        let cellViewModel = NewsCellViewModelImpl(realmId: realmId,
+                                                   newsHeader: rssItem.title,
+                                                   newsSource: rssItem.sourceTitle,
+                                                   date: rssItem.pubDate,
+                                                   hasImage: rssItem.imageLink != nil,
+                                                   isRead: rssItem.isRead)
+        cell.set(viewModel: cellViewModel)
         
         if !rssItem.isImageDownloaded, viewModel.shouldDownload(id: realmId), let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
             viewModel.networkManager.downloadContent(from: url, realmId: realmId, completion: { [weak self] localURL, error in
