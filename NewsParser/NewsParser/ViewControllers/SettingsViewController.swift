@@ -128,6 +128,7 @@ extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
+            //TODO: Show picker
             break
         case 1:
             let cell = tableView.cellForRow(at: indexPath)
