@@ -102,6 +102,7 @@ extension SettingsViewController: UITableViewDataSource {
             cell.accessoryType = isVisible ? .checkmark : .none
         case 2:
             cell.textLabel?.text = "Очистить кэш"
+            cell.textLabel?.textColor = .red
         default: break
         }
         
@@ -132,7 +133,9 @@ extension SettingsViewController: UITableViewDelegate {
             
             viewModel?.toggleNewsSourceVisibility(at: indexPath.row)
         case 2:
-            DatabaseManager.shared.deleteAll()
+            Utils.makePopUp(parent: self, title: nil, message: "Удалить кэш?", actionTitle: "Удалить", actionStyle: .destructive, cancelTitle: "Отмена", actionHandler: { _ in
+                DatabaseManager.shared.deleteAll()
+            }, cancelHandler: nil)
         default: break
         }
         
