@@ -29,6 +29,8 @@
 		22F70E602D25B5780020C807 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E5F2D25B5780020C807 /* ImageCacheManager.swift */; };
 		22F70E642D2705780020C807 /* NewsListViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E632D2705780020C807 /* NewsListViewControllerViewModel.swift */; };
 		22F70E662D2C251A0020C807 /* NSNotificationName+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */; };
+		22F70E682D31673D0020C807 /* SettingsViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E672D31673D0020C807 /* SettingsViewControllerViewModel.swift */; };
+		22F70E6A2D317A180020C807 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E692D317A180020C807 /* UINavigationController+Extensions.swift */; };
 		7270065CE8C4DDE4A8DB49EF /* Pods_NewsParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 616DE3B8062CC4402626EE7C /* Pods_NewsParser.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +61,8 @@
 		22F70E5F2D25B5780020C807 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		22F70E632D2705780020C807 /* NewsListViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListViewControllerViewModel.swift; sourceTree = "<group>"; };
 		22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotificationName+Extensions.swift"; sourceTree = "<group>"; };
+		22F70E672D31673D0020C807 /* SettingsViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerViewModel.swift; sourceTree = "<group>"; };
+		22F70E692D317A180020C807 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
 		577A6B1F0D96FE9FC7F74970 /* Pods-NewsParser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsParser.release.xcconfig"; path = "Target Support Files/Pods-NewsParser/Pods-NewsParser.release.xcconfig"; sourceTree = "<group>"; };
 		616DE3B8062CC4402626EE7C /* Pods_NewsParser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsParser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3FF48DC207038B6965543D6 /* Pods-NewsParser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsParser.debug.xcconfig"; path = "Target Support Files/Pods-NewsParser/Pods-NewsParser.debug.xcconfig"; sourceTree = "<group>"; };
@@ -81,6 +85,7 @@
 			children = (
 				22298B162D2450BC008ECB45 /* URLSession+Extensions.swift */,
 				22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */,
+				22F70E692D317A180020C807 /* UINavigationController+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -138,6 +143,7 @@
 			children = (
 				22F70E632D2705780020C807 /* NewsListViewControllerViewModel.swift */,
 				227CA4242D230C2700D967C5 /* NewsDetailsViewControllerViewModel.swift */,
+				22F70E672D31673D0020C807 /* SettingsViewControllerViewModel.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -345,10 +351,12 @@
 				227CA4352D230C2700D967C5 /* Utils.swift in Sources */,
 				227CA4362D230C2700D967C5 /* NewsSource.swift in Sources */,
 				227CA4372D230C2700D967C5 /* RSSItem.swift in Sources */,
+				22F70E682D31673D0020C807 /* SettingsViewControllerViewModel.swift in Sources */,
 				22298B172D2450BC008ECB45 /* URLSession+Extensions.swift in Sources */,
 				22F70E662D2C251A0020C807 /* NSNotificationName+Extensions.swift in Sources */,
 				227CA4382D230C2700D967C5 /* NewsListViewControllerDelegate.swift in Sources */,
 				227CA4392D230C2700D967C5 /* NewsDetailsViewController.swift in Sources */,
+				22F70E6A2D317A180020C807 /* UINavigationController+Extensions.swift in Sources */,
 				227CA43A2D230C2700D967C5 /* NewsListViewController.swift in Sources */,
 				227CA43B2D230C2700D967C5 /* SettingsViewController.swift in Sources */,
 				22F70E602D25B5780020C807 /* ImageCacheManager.swift in Sources */,
