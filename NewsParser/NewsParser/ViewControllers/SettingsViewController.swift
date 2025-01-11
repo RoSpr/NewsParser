@@ -30,6 +30,8 @@ final class SettingsViewController: UIViewController {
         addSubviews()
         setupConstraints()
         setupNavigationBar()
+        
+        viewModel?.delegate = self
     }
     
     private func addSubviews() {
@@ -151,5 +153,15 @@ extension SettingsViewController: UITabBarControllerDelegate {
               self.view.window != nil else { return }
         
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
+}
+
+protocol SettingsViewControllerDelegate {
+    func reloadSources()
+}
+
+extension SettingsViewController: SettingsViewControllerDelegate {
+    func reloadSources() {
+        tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
 }

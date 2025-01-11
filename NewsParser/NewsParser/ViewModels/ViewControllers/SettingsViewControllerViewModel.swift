@@ -11,6 +11,8 @@ protocol SettingsViewControllerViewModel {
     var selectedFrequency: UpdateFrequenciesInMins { get set }
     var newsSources: [NewsSource] { get }
     
+    var delegate: SettingsViewControllerDelegate? { get set }
+    
     var numberOfSections: Int { get }
     func numberOfRowsIn(section: Int) -> Int
     
@@ -35,8 +37,14 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
     var selectedFrequency: UpdateFrequenciesInMins = .fiveMin
     var newsSources: [NewsSource] = Array(DatabaseManager.shared.fetch(NewsSource.self))
     
+    var delegate: SettingsViewControllerDelegate?
+    
     var numberOfSections: Int {
         return 3
+    }
+    
+    init() {
+        addNotificationToken()
     }
     
     func numberOfRowsIn(section: Int) -> Int {
@@ -72,10 +80,7 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
         
         let source = newsSources[index]
         
-        let id = newsSources[index].id
         DatabaseManager.shared.update {
-//            let realmObject = DatabaseManager.shared.fetch(NewsSource.self, predicate: NSPredicate(format: "id == %@", id)).first
-//            realmObject?.isActive.toggle()
             source.isActive.toggle()
         }
     }
@@ -96,6 +101,22 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
             return "12 часов"
         case .day:
             return "день"
+        }
+    }
+    
+    private func addNotificationToken() {
+        DatabaseManager.shared.observeChanges(for: NewsSource.self) { [weak self] changes in
+            guard let self = self else { return }
+            
+            switch changes {
+            case .initial(_):
+                break
+            case .update(let allElements, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                self.newsSources = Array(allElements)
+                self.delegate?.reloadSources()
+            case .error(let error):
+                print("Error observing NewsSourcee changes: \(error)")
+            }
         }
     }
 }
