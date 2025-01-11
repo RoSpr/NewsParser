@@ -174,10 +174,12 @@ extension NewsListViewController: NewsListViewControllerDelegate {
         DispatchQueue.main.async { [weak self] in
             let insertedIndexPaths = insertions.map { IndexPath(row: $0, section: 0) }
             let updatedIndexPaths = updates.map { IndexPath(row: $0, section: 0) }
+            let deletedIndexPaths = deletions.map { IndexPath(row: $0, section: 0) }
             
             self?.tableView.performBatchUpdates { [weak self] in
                 self?.tableView.insertRows(at: insertedIndexPaths, with: .automatic)
                 self?.tableView.reloadRows(at: updatedIndexPaths, with: .automatic)
+                self?.tableView.deleteRows(at: deletedIndexPaths, with: .automatic)
             }
         }
     }
