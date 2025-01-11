@@ -76,6 +76,12 @@ final class NewsListViewController: UIViewController {
         ]
         
         navigationController?.navigationBar.standardAppearance = appearance
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshNews))
+    }
+    
+    @objc private func refreshNews() {
+        viewModel?.startFetchingIfNeeded()
     }
 }
 
