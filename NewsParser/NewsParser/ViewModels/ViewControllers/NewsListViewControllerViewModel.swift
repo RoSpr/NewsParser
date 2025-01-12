@@ -25,6 +25,7 @@ protocol NewsListViewControllerViewModel {
 final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel {
     private let queue: DispatchQueue = DispatchQueue(label: "com.newsListViewModel.queue", attributes: .concurrent)
     
+    private var activeSourcesIds: Set<String> = []
     private var newsItems: [RSSItemRaw] = []
     private var downloadingIds: Set<String> = []
     
@@ -110,11 +111,15 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
     }
     
     private func fetchSavedRSSItems() {
+        if activeSourcesIds.count == 0 {
+            activeSourcesIds = Set(Array(DatabaseManager.shared.fetchActiveNewsSources().map { $0.id }))
+        }
+        
         let savedRSSItems = DatabaseManager.shared.fetchActiveRSSItemsRealm()
         let rssRawItems = savedRSSItems.map {
             RSSItemRaw(realmId: $0.id, sourceTitle: $0.sourceTitle, title: $0.title, link: $0.link, imageLink: $0.imageLink, description: $0.newsDescription, pubDate: $0.pubDate, isRead: $0.isRead, isImageDownloaded: $0.isImageDownloaded)
         }
-        newsItems.append(contentsOf: rssRawItems)
+        newsItems = rssRawItems
         newsItems.sort(by: { $0.pubDate > $1.pubDate })
         delegate?.reloadData()
     }
@@ -169,7 +174,17 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
             case .update(let allSources, let deletions, let insertions, let updates):
                 let ids = insertions.map { allSources[$0].id }
                 if ids.count > 0 {
+                    self.activeSourcesIds.formUnion(ids)
                     self.startFetchingIfNeeded(sourceIds: ids)
+                }
+                
+                if updates.count > 0 || deletions.count > 0 {
+                    let activeSourceIds = Set(allSources.filter { $0.isActive == true }.map { $0.id })
+                    if self.activeSourcesIds != activeSourceIds {
+                        self.activeSourcesIds = activeSourceIds
+                        
+                        self.fetchSavedRSSItems()
+                    }
                 }
             case .error(let error):
                 print("Error in Realm observer: \(error)")
