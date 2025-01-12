@@ -136,9 +136,9 @@ extension SettingsViewController: UITableViewDelegate {
             
             viewModel?.toggleNewsSourceVisibility(at: indexPath.row)
         case 2:
-            Utils.makePopUp(parent: self, title: nil, message: "Удалить кэш?", actionTitle: "Удалить", actionStyle: .destructive, cancelTitle: "Отмена", actionHandler: { _ in
+            Utils.makePopUp(parent: self, title: nil, message: "Удалить кэш?", actionTitle: "Удалить", actionStyle: .destructive, cancelTitle: "Отмена", actionHandler: {
                 DatabaseManager.shared.deleteAll()
-            }, cancelHandler: nil)
+            })
         default: break
         }
         
