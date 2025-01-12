@@ -17,7 +17,7 @@ protocol NewsListViewControllerViewModel {
     
     func itemAtIndex(indexPath: IndexPath) -> RSSItemRaw
     
-    func startFetchingIfNeeded()
+    func startFetchingIfNeeded(sourceIds ids: [String]?)
     func shouldDownload(id: String) -> Bool
     func isDownloadInProgress(id: String) -> Bool
 }
@@ -47,11 +47,16 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
         return newsSources[indexPath.row]
     }
     
-    func startFetchingIfNeeded() {
+    func startFetchingIfNeeded(sourceIds ids: [String]? = nil) {
         Task {
             await withCheckedContinuation { continuation in
                 queue.async {
-                    let newsSources = DatabaseManager.shared.fetch(NewsSource.self)
+                    var predicate: NSPredicate? = nil
+                    if let ids = ids {
+                        predicate = NSPredicate(format: "id IN %@", ids)
+                    }
+                    
+                    let newsSources = DatabaseManager.shared.fetch(NewsSource.self, predicate: predicate)
                     
                     for newsSource in newsSources {
                         let existingLinks = Set(newsSource.news.map { $0.link })
@@ -150,6 +155,22 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
                 }
                 
                 self.delegate?.tableViewUpdated(insertions: sortedInsertions, deletions: [], updates: updates)
+            case .error(let error):
+                print("Error in Realm observer: \(error)")
+            }
+        }
+        
+        DatabaseManager.shared.observeChanges(for: NewsSource.self) { [weak self] changes in
+            guard let self = self else { return }
+            
+            switch changes {
+            case .initial(_):
+                break
+            case .update(let allSources, let deletions, let insertions, let updates):
+                let ids = insertions.map { allSources[$0].id }
+                if ids.count > 0 {
+                    self.startFetchingIfNeeded(sourceIds: ids)
+                }
             case .error(let error):
                 print("Error in Realm observer: \(error)")
             }

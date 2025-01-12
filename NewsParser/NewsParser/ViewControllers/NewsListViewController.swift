@@ -34,7 +34,7 @@ final class NewsListViewController: UIViewController {
         setupNavigationBar()
         
         viewModel?.delegate = self
-        viewModel?.startFetchingIfNeeded()
+        viewModel?.startFetchingIfNeeded(sourceIds: nil)
         
         self.tabBarController?.delegate = self
     }
@@ -86,7 +86,8 @@ final class NewsListViewController: UIViewController {
     }
     
     @objc private func refreshNews() {
-        viewModel?.startFetchingIfNeeded()
+        guard let viewModel = viewModel as? NewsListViewControllerViewModelImpl else { return }
+        viewModel.startFetchingIfNeeded()
     }
     
     @objc private func addNewSource() {
