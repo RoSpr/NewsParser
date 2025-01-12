@@ -25,7 +25,7 @@ protocol NewsListViewControllerViewModel {
 final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel {
     private let queue: DispatchQueue = DispatchQueue(label: "com.newsListViewModel.queue", attributes: .concurrent)
     
-    private var newsSources: [RSSItemRaw] = []
+    private var newsItems: [RSSItemRaw] = []
     private var downloadingIds: Set<String> = []
     
     init() {
@@ -40,11 +40,11 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
     var numberOfSections: Int { return 1 }
     
     func numberOfItemsInSection(section: Int) -> Int {
-        return newsSources.count
+        return newsItems.count
     }
     
     func itemAtIndex(indexPath: IndexPath) -> RSSItemRaw {
-        return newsSources[indexPath.row]
+        return newsItems[indexPath.row]
     }
     
     func startFetchingIfNeeded(sourceIds ids: [String]? = nil) {
@@ -114,8 +114,8 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
         let rssRawItems = savedRSSItems.map {
             RSSItemRaw(realmId: $0.id, sourceTitle: $0.sourceTitle, title: $0.title, link: $0.link, imageLink: $0.imageLink, description: $0.newsDescription, pubDate: $0.pubDate, isRead: $0.isRead, isImageDownloaded: $0.isImageDownloaded)
         }
-        newsSources.append(contentsOf: rssRawItems)
-        newsSources.sort(by: { $0.pubDate > $1.pubDate })
+        newsItems.append(contentsOf: rssRawItems)
+        newsItems.sort(by: { $0.pubDate > $1.pubDate })
         delegate?.reloadData()
     }
     
@@ -134,23 +134,23 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
                 
                 updates.forEach {
                     let item = allElements[$0]
-                    if let index = self.newsSources.firstIndex(where: { $0.realmId == item.id }) {
-                        var rawItem = self.newsSources[index]
+                    if let index = self.newsItems.firstIndex(where: { $0.realmId == item.id }) {
+                        var rawItem = self.newsItems[index]
                         rawItem.isRead = item.isRead
                         rawItem.isImageDownloaded = item.isImageDownloaded
-                        self.newsSources[index] = rawItem
+                        self.newsItems[index] = rawItem
                     }
                 }
                 
-                self.newsSources.insert(contentsOf: newElements, at: 0)
-                self.newsSources.sort(by: { $0.pubDate > $1.pubDate })
+                self.newsItems.insert(contentsOf: newElements, at: 0)
+                self.newsItems.sort(by: { $0.pubDate > $1.pubDate })
                 
                 let sortedInsertions = newElements.compactMap { newItem in
-                    self.newsSources.firstIndex(where: { $0.realmId == newItem.realmId })
+                    self.newsItems.firstIndex(where: { $0.realmId == newItem.realmId })
                 }
                 
-                if deletions.count == self.newsSources.count {
-                    self.newsSources.removeAll()
+                if deletions.count == self.newsItems.count {
+                    self.newsItems.removeAll()
                     self.delegate?.reloadData()
                 }
                 
