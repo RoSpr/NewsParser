@@ -35,7 +35,7 @@ enum UpdateFrequenciesInMins: Int {
 
 final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel {
     var selectedFrequency: UpdateFrequenciesInMins = .fiveMin
-    var newsSources: [NewsSource] = Array(DatabaseManager.shared.fetch(NewsSource.self))
+    var newsSources: [NewsSource] = Array(DatabaseManager.shared.fetch(NewsSource.self).sorted(by: { $0.dateAdded < $1.dateAdded }))
     
     var delegate: SettingsViewControllerDelegate?
     
@@ -112,7 +112,7 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
             case .initial(_):
                 break
             case .update(let allElements, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                self.newsSources = Array(allElements)
+                self.newsSources = Array(allElements).sorted(by: { $0.dateAdded < $1.dateAdded })
                 self.delegate?.reloadSources()
             case .error(let error):
                 print("Error observing NewsSourcee changes: \(error)")
