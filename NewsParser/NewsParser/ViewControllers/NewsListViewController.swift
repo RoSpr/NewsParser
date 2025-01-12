@@ -13,6 +13,8 @@ final class NewsListViewController: UIViewController {
     
     private let queue = DispatchQueue(label: "com.newsParser.newsListViewControllerQueue", attributes: .concurrent)
     
+    private var insertedStringUrl: String? = nil
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -77,11 +79,39 @@ final class NewsListViewController: UIViewController {
         
         navigationController?.navigationBar.standardAppearance = appearance
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshNews))
+        let refreshNewsItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshNews))
+        let addNewSourceItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewSource))
+
+        navigationItem.setRightBarButtonItems([refreshNewsItem, addNewSourceItem], animated: false)
     }
     
     @objc private func refreshNews() {
         viewModel?.startFetchingIfNeeded()
+    }
+    
+    @objc private func addNewSource() {
+        Utils.addPopupWithTextfield(parent: self, title: nil, message: "Введите ссылку на новый источник RSS новостей", textfieldDelegate: self, actionTitle: "Добавить", actionStyle: .default, cancelTitle: "Отмена", actionHandler: { [weak self] in
+            guard let self = self, let addedStringUrl = insertedStringUrl else { return }
+            self.insertedStringUrl = nil
+            
+            if addedStringUrl.isValidURL() {
+                DispatchQueue.global().async {
+                    let sources = Array(DatabaseManager.shared.fetch(NewsSource.self)).map { $0.stringURL.removeUrlPrefix() }
+                    if !sources.contains(addedStringUrl.removeUrlPrefix()) {
+                        let newSource = NewsSource()
+                        newSource.stringURL = addedStringUrl
+                        
+                        DatabaseManager.shared.add(newSource)
+                    } else {
+                        DispatchQueue.main.async {
+                            Utils.makePopUp(parent: self, title: "Ошибка", message: "Источник \'\(addedStringUrl)\' уже был добавлен", actionTitle: "Ок", actionStyle: .default)
+                        }
+                    }
+                }
+            } else {
+                Utils.makePopUp(parent: self, title: "Ошибка", message: "Введенный URL неверный. URL должен быть в следующем формате: \"domain.com\"", actionTitle: "Ок", actionStyle: .default)
+            }
+        }, cancelHandler: nil)
     }
 }
 
@@ -199,5 +229,12 @@ extension NewsListViewController: UITabBarControllerDelegate {
               self.view.window != nil else { return }
         
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
+}
+
+//MARK: - UITextFieldDelegate
+extension NewsListViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        insertedStringUrl = textField.text
     }
 }
