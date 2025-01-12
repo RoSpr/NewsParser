@@ -14,6 +14,7 @@ class NewsSource: Object {
     @Persisted var stringURL: String
     @Persisted var isActive: Bool = true
     @Persisted var news: List<RSSItem>
+    @Persisted var dateAdded: Date = Date()
     
     override static func primaryKey() -> String? {
         return "id"
