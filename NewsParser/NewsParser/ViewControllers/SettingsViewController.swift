@@ -11,9 +11,6 @@ import UIKit
 final class SettingsViewController: UIViewController {
     var viewModel: SettingsViewControllerViewModel?
     
-    private var pickerView: UIPickerView?
-    private var pickerContainerView: UIView?
-    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -152,6 +149,7 @@ extension SettingsViewController: UITabBarControllerDelegate {
     }
 }
 
+//MARK: - SettingsViewControllerDelegate
 protocol SettingsViewControllerDelegate {
     func reloadSources()
 }
@@ -166,12 +164,6 @@ extension SettingsViewController: SettingsViewControllerDelegate {
 extension SettingsViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return UpdateFrequencies(rawValue: row)?.getTextDescription()
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if let selectedFrequency = UpdateFrequencies(rawValue: row) {
-            viewModel?.selectedFrequency = selectedFrequency
-        }
     }
 }
 
@@ -191,60 +183,35 @@ private extension SettingsViewController {
     func presentPickerView() {
         guard let viewModel = viewModel else { return }
         
-        let containerHeight: CGFloat = 250
         let picker = UIPickerView()
         picker.delegate = self
         picker.dataSource = self
         picker.selectRow(viewModel.selectedFrequency.rawValue, inComponent: 0, animated: false)
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.overrideUserInterfaceStyle = .light
-        self.pickerView = picker
         
-        let effect = UIBlurEffect(style: .systemThickMaterialLight)
-        let containerView = UIVisualEffectView(effect: effect)
-        containerView.frame = CGRect(x: 5, y: view.frame.height, width: view.frame.width - 10, height: containerHeight)
-        containerView.layer.cornerRadius = 10
-        containerView.clipsToBounds = true
+        let alertController = UIAlertController(title: "Select Update Frequency", message: "\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+        alertController.overrideUserInterfaceStyle = .light
         
-        let doneButton = UIButton(type: .system)
-        doneButton.setTitle("Готово", for: .normal)
-        doneButton.addTarget(self, action: #selector(hidePickerView), for: .touchUpInside)
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        containerView.contentView.addSubview(doneButton)
-        containerView.contentView.addSubview(picker)
+        alertController.view.addSubview(picker)
         
         NSLayoutConstraint.activate([
-            doneButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            doneButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -10),
-            doneButton.heightAnchor.constraint(equalToConstant: 21),
-            
-            picker.topAnchor.constraint(equalTo: doneButton.bottomAnchor, constant: 2),
-            picker.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            picker.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            picker.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+            picker.leftAnchor.constraint(equalTo: alertController.view.leftAnchor, constant: 8),
+            picker.topAnchor.constraint(equalTo: alertController.view.topAnchor, constant: 15),
+            picker.rightAnchor.constraint(equalTo: alertController.view.rightAnchor, constant: -8),
+            picker.bottomAnchor.constraint(equalTo: alertController.view.bottomAnchor, constant: -110)
         ])
         
-        view.addSubview(containerView)
-        self.pickerContainerView = containerView
-        
-        UIView.animate(withDuration: 0.3) { [weak self] in
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Select", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
-            containerView.frame.origin.y -= (containerHeight + self.view.safeAreaInsets.bottom + 10)
-        }
-    }
-    
-    @objc func hidePickerView() {
-        guard let pickerContainerView = pickerContainerView else { return }
+            if let selectedFrequency = UpdateFrequencies(rawValue: picker.selectedRow(inComponent: 0)) {
+                self.viewModel?.selectedFrequency = selectedFrequency
+            }
+            
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        }))
         
-        UIView.animate(withDuration: 0.3, animations: {
-            pickerContainerView.frame.origin.y += pickerContainerView.frame.height
-        }) { _ in
-            pickerContainerView.removeFromSuperview()
-            self.pickerContainerView = nil
-            self.pickerView = nil
-        }
-        
-        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        present(alertController, animated: true)
     }
 }
