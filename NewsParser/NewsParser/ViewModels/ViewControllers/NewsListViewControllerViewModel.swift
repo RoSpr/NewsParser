@@ -23,7 +23,7 @@ protocol NewsListViewControllerViewModel {
 }
 
 final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel {
-    private let queue: DispatchQueue = DispatchQueue(label: "com.newsListViewModel.queue", attributes: .concurrent)
+    private let queue: DispatchQueue = DispatchQueue(label: "com.newsListViewModel.queue")
     
     private var activeSourcesIds: Set<String> = []
     private var newsItems: [RSSItemRaw] = []

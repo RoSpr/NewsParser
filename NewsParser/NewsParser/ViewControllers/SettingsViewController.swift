@@ -190,7 +190,7 @@ private extension SettingsViewController {
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.overrideUserInterfaceStyle = .light
         
-        let alertController = UIAlertController(title: "Select Update Frequency", message: "\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: "Выберите частоту обновления", message: "\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
         alertController.overrideUserInterfaceStyle = .light
         
         alertController.view.addSubview(picker)
@@ -202,8 +202,8 @@ private extension SettingsViewController {
             picker.bottomAnchor.constraint(equalTo: alertController.view.bottomAnchor, constant: -110)
         ])
         
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "Select", style: .default, handler: { [weak self] _ in
+        alertController.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Выбрать", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
             if let selectedFrequency = UpdateFrequencies(rawValue: picker.selectedRow(inComponent: 0)) {
                 self.viewModel?.selectedFrequency = selectedFrequency

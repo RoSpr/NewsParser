@@ -110,7 +110,7 @@ final class NewsListViewController: UIViewController {
                     }
                 }
             } else {
-                Utils.makePopUp(parent: self, title: "Ошибка", message: "Введенный URL неверный. URL должен быть в следующем формате: \"domain.com\"", actionTitle: "Ок", actionStyle: .default)
+                Utils.makePopUp(parent: self, title: "Ошибка", message: "Введенный URL не является верным", actionTitle: "Ок", actionStyle: .default)
             }
         }, cancelHandler: nil)
     }
