@@ -8,6 +8,10 @@
 import Foundation
 import RealmSwift
 
+enum UserDefaultsKeys: String, CaseIterable {
+    case refreshInterval = "refreshInterval_UDKey"
+}
+
 final class DatabaseManager {
     static let shared = DatabaseManager()
 
@@ -109,5 +113,13 @@ final class DatabaseManager {
         }
         
         return Array(results)
+    }
+    
+    func saveValueToUD(key: UserDefaultsKeys, value: Any) {
+        UserDefaults.standard.setValue(value, forKey: key.rawValue)
+    }
+    
+    func retrieveValueFromUD(key: UserDefaultsKeys) -> Any? {
+        return UserDefaults.standard.value(forKey: key.rawValue)
     }
 }
