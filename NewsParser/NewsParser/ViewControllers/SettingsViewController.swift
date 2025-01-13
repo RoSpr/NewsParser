@@ -136,6 +136,19 @@ extension SettingsViewController: UITableViewDelegate {
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+            let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] (action, view, completionHandler) in
+                self?.viewModel?.deleteSource(at: indexPath.row)
+                completionHandler(true)
+            }
+            
+            deleteAction.backgroundColor = .red
+            
+            let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+            configuration.performsFirstActionWithFullSwipe = true
+            return configuration
+        }
 }
 
 //MARK: - UITabBarControllerDelegate

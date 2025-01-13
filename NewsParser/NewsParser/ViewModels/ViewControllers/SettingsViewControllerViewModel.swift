@@ -19,6 +19,8 @@ protocol SettingsViewControllerViewModel {
     func getNewsSourceTitleOrLink(at index: Int) -> String?
     func isSourceVisible(at index: Int) -> Bool
     func toggleNewsSourceVisibility(at index: Int)
+    
+    func deleteSource(at index: Int)
 }
 
 final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel {
@@ -81,6 +83,14 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
         DatabaseManager.shared.update {
             source.isActive.toggle()
         }
+    }
+    
+    func deleteSource(at index: Int) {
+        guard index < newsSources.count else { return }
+        
+        let source = newsSources[index]
+        
+        DatabaseManager.shared.delete(source)
     }
     
     private func addNotificationToken() {
