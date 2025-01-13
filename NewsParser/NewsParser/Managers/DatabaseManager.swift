@@ -91,10 +91,13 @@ final class DatabaseManager {
         notificationTokens.append(notificationToken)
     }
     
-    func fetchActiveNewsSources() -> [NewsSource] {
+    func fetchActiveNewsSources(predicate: NSPredicate? = nil) -> [NewsSource] {
         let realm = getRealmInstance()
         
-        let activeSources = realm.objects(NewsSource.self).filter("isActive == true")
+        var activeSources = realm.objects(NewsSource.self).filter("isActive == true")
+        if let predicate = predicate {
+            activeSources = activeSources.filter(predicate)
+        }
         
         return Array(activeSources)
     }
