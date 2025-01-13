@@ -13,13 +13,16 @@ protocol NewsListViewControllerViewModel {
     var networkManager: NetworkManagerProtocol { get }
     
     var numberOfSections: Int { get }
-    func numberOfItemsInSection(section: Int) -> Int
+    func numberOfItemsInSection(section: Int, isInSearch: Bool) -> Int
     
-    func itemAtIndex(indexPath: IndexPath) -> RSSItemRaw
+    func itemAtIndex(indexPath: IndexPath, isInSearch: Bool) -> RSSItemRaw
     
     func fetchSources(sourceIds ids: [String]?)
     func shouldDownload(id: String) -> Bool
     func isDownloadInProgress(id: String) -> Bool
+    
+    func search(text: String)
+    func getIndexOfItem(realmId: String?, needsFiltered: Bool) -> IndexPath?
 }
 
 final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel {
@@ -28,6 +31,12 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
     private var activeSourcesIds: Set<String> = []
     private var newsItems: [RSSItemRaw] = []
     private var downloadingIds: Set<String> = []
+    
+    private var filteredNewsItems: [RSSItemRaw] = [] {
+        didSet {
+            delegate?.reloadData()
+        }
+    }
     
     private var updateTimer: Timer?
     
@@ -43,11 +52,19 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
     
     var numberOfSections: Int { return 1 }
     
-    func numberOfItemsInSection(section: Int) -> Int {
+    func numberOfItemsInSection(section: Int, isInSearch: Bool) -> Int {
+        guard !isInSearch else {
+            return filteredNewsItems.count
+        }
+        
         return newsItems.count
     }
     
-    func itemAtIndex(indexPath: IndexPath) -> RSSItemRaw {
+    func itemAtIndex(indexPath: IndexPath, isInSearch: Bool) -> RSSItemRaw {
+        guard !isInSearch else {
+            return filteredNewsItems[indexPath.row]
+        }
+        
         return newsItems[indexPath.row]
     }
     
@@ -112,6 +129,30 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
     
     func isDownloadInProgress(id: String) -> Bool {
         return downloadingIds.contains(id)
+    }
+    
+    func search(text: String) {
+        filteredNewsItems = newsItems.filter { item in
+            item.sourceTitle.lowercased().contains(text.lowercased()) ||
+            item.title.lowercased().contains(text.lowercased())
+        }
+    }
+    
+    func getIndexOfItem(realmId: String?, needsFiltered: Bool) -> IndexPath? {
+        guard let realmId = realmId else { return nil }
+        
+        var indexPath: IndexPath? = nil
+        if needsFiltered {
+            if let row = filteredNewsItems.firstIndex(where: { $0.realmId == realmId }) {
+                indexPath = IndexPath(row: row, section: 0)
+            }
+        } else {
+            if let row = newsItems.firstIndex(where: { $0.realmId == realmId }) {
+                indexPath = IndexPath(row: row, section: 0)
+            }
+        }
+        
+        return indexPath
     }
     
     //MARK: Private methods

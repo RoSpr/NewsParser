@@ -15,6 +15,8 @@ final class NewsListViewController: UIViewController {
     
     private var insertedStringUrl: String? = nil
     
+    private var isInSearchMode = false
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -79,6 +81,14 @@ final class NewsListViewController: UIViewController {
         
         navigationController?.navigationBar.standardAppearance = appearance
         
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.overrideUserInterfaceStyle = .light
+        searchController.searchBar.setValue("Отмена", forKey: "cancelButtonText")
+        navigationItem.searchController = searchController
+        
         let refreshNewsItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshNews))
         let addNewSourceItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewSource))
 
@@ -114,6 +124,12 @@ final class NewsListViewController: UIViewController {
             }
         }, cancelHandler: nil)
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if isInSearchMode {
+            navigationItem.searchController?.searchBar.resignFirstResponder()
+        }
+    }
 }
 
 //MARK: - Table view delegate
@@ -129,7 +145,7 @@ extension NewsListViewController: UITableViewDelegate {
         if let viewModel = viewModel {
             let image = cell?.viewModel?.image
             
-            let newsDetailViewModel = NewsDetailsViewControllerViewModelImpl(item: viewModel.itemAtIndex(indexPath: indexPath))
+            let newsDetailViewModel = NewsDetailsViewControllerViewModelImpl(item: viewModel.itemAtIndex(indexPath: indexPath, isInSearch: isInSearchMode))
             newsDetailViewController.viewModel = newsDetailViewModel
             
             if let realmId = newsDetailViewModel.realmId, image == nil, viewModel.isDownloadInProgress(id: realmId) {
@@ -149,13 +165,13 @@ extension NewsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.numberOfItemsInSection(section: section) ?? 0
+        return viewModel?.numberOfItemsInSection(section: section, isInSearch: isInSearchMode) ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier,
                                                        for: indexPath) as? NewsTableViewCell,
-              let rssItem = viewModel?.itemAtIndex(indexPath: indexPath),
+              let rssItem = viewModel?.itemAtIndex(indexPath: indexPath, isInSearch: isInSearchMode),
               let realmId = rssItem.realmId,
               let viewModel = viewModel else {
             print("Failed to get cell, rssItem at index, realmId, or viewModel")
@@ -186,7 +202,10 @@ extension NewsListViewController: UITableViewDataSource {
                         
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
-                            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                            
+                            if let indexPath = self.viewModel?.getIndexOfItem(realmId: rssItem.realmId, needsFiltered: self.isInSearchMode) {
+                                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                            }
                         }
                     } else if let error = error {
                         print("Failed to download image: \(error)")
@@ -208,6 +227,8 @@ extension NewsListViewController: NewsListViewControllerDelegate {
     }
     
     func tableViewUpdated(insertions: [Int], deletions: [Int], updates: [Int]) {
+        guard !isInSearchMode else { return }
+        
         DispatchQueue.main.async { [weak self] in
             let insertedIndexPaths = insertions.map { IndexPath(row: $0, section: 0) }
             let updatedIndexPaths = updates.map { IndexPath(row: $0, section: 0) }
@@ -237,5 +258,19 @@ extension NewsListViewController: UITabBarControllerDelegate {
 extension NewsListViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         insertedStringUrl = textField.text
+    }
+}
+
+//MARK: - UISearchResultsUpdating
+extension NewsListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        isInSearchMode = true
+        guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+            isInSearchMode = false
+            tableView.reloadData()
+            return
+        }
+        
+        viewModel?.search(text: searchText)
     }
 }
