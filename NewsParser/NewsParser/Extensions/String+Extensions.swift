@@ -9,7 +9,7 @@ import Foundation
 
 extension String {
     func isValidURL() -> Bool {
-        let pattern = #"^https?://(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.*"#
+        let pattern = #"^https?://(www\.)?[a-zA-Z0-9-\.]+\.[a-zA-Z]{2,}/.*"#
         
         guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) else {
             return false
