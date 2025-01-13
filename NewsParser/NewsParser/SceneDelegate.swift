@@ -30,6 +30,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
     
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        NotificationCenter.default.post(name: .willEnterForeground, object: nil)
+    }
+    
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        NotificationCenter.default.post(name: .didEnterBackground, object: nil)
+    }
     
     private func createTabBarController() -> UITabBarController {
         let tabBarController = UITabBarController()

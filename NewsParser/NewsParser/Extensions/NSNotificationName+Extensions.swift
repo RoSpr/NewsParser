@@ -9,4 +9,7 @@ import Foundation
 
 extension NSNotification.Name {
     public static let didFinishImageDownload = NSNotification.Name("didFinishImageDownload")
+    public static let willEnterForeground = NSNotification.Name("willEnterForeground")
+    public static let didEnterBackground = NSNotification.Name("didEnterBackground")
+    public static let didChangeRefreshInterval = NSNotification.Name("didChangeRefreshInterval")
 }
