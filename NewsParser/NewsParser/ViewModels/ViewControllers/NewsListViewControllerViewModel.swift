@@ -17,7 +17,7 @@ protocol NewsListViewControllerViewModel {
     
     func itemAtIndex(indexPath: IndexPath) -> RSSItemRaw
     
-    func startFetchingIfNeeded(sourceIds ids: [String]?)
+    func fetchSources(sourceIds ids: [String]?)
     func shouldDownload(id: String) -> Bool
     func isDownloadInProgress(id: String) -> Bool
 }
@@ -48,7 +48,7 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
         return newsItems[indexPath.row]
     }
     
-    func startFetchingIfNeeded(sourceIds ids: [String]? = nil) {
+    func fetchSources(sourceIds ids: [String]? = nil) {
         Task {
             await withCheckedContinuation { continuation in
                 queue.async {
@@ -175,7 +175,7 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
                 let ids = insertions.map { allSources[$0].id }
                 if ids.count > 0 {
                     self.activeSourcesIds.formUnion(ids)
-                    self.startFetchingIfNeeded(sourceIds: ids)
+                    self.fetchSources(sourceIds: ids)
                 }
                 
                 if updates.count > 0 || deletions.count > 0 {
