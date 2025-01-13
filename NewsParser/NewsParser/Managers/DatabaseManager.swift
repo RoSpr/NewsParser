@@ -8,10 +8,6 @@
 import Foundation
 import RealmSwift
 
-enum UserDefaultsKeys: String, CaseIterable {
-    case refreshInterval = "refreshInterval_UDKey"
-}
-
 final class DatabaseManager {
     static let shared = DatabaseManager()
 

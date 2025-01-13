@@ -8,7 +8,7 @@
 import Foundation
 
 protocol SettingsViewControllerViewModel {
-    var selectedFrequency: UpdateFrequenciesInMins { get set }
+    var selectedFrequency: UpdateFrequencies { get set }
     var newsSources: [NewsSource] { get }
     
     var delegate: SettingsViewControllerDelegate? { get set }
@@ -21,53 +21,11 @@ protocol SettingsViewControllerViewModel {
     func toggleNewsSourceVisibility(at index: Int)
 }
 
-enum UpdateFrequenciesInMins: Int, CaseIterable {
-    case fiveMin = 0, fifteenMin, halfHour, hour, sixHours, twelveHours, day
-    
-    func getIntValue() -> Int {
-        switch self {
-        case .fiveMin:
-            return 5
-        case .fifteenMin:
-            return 15
-        case .halfHour:
-            return 30
-        case .hour:
-            return 60
-        case .sixHours:
-            return 360
-        case .twelveHours:
-            return 720
-        case .day:
-            return 1440
-        }
-    }
-    
-    func getTextDescription() -> String {
-        switch self {
-        case .fiveMin:
-            return "5 минут"
-        case .fifteenMin:
-            return "15 минут"
-        case .halfHour:
-            return "30 минут"
-        case .hour:
-            return "1 час"
-        case .sixHours:
-            return "6 часов"
-        case .twelveHours:
-            return "12 часов"
-        case .day:
-            return "день"
-        }
-    }
-}
-
 final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel {
-    var selectedFrequency: UpdateFrequenciesInMins {
+    var selectedFrequency: UpdateFrequencies {
         get {
             let rawValue = (DatabaseManager.shared.retrieveValueFromUD(key: .refreshInterval) as? Int) ?? 0
-            return UpdateFrequenciesInMins(rawValue: rawValue) ?? .fiveMin
+            return UpdateFrequencies(rawValue: rawValue) ?? .fiveMin
         }
         set {
             DatabaseManager.shared.saveValueToUD(key: .refreshInterval, value: newValue.rawValue)

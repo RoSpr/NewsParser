@@ -165,11 +165,11 @@ extension SettingsViewController: SettingsViewControllerDelegate {
 //MARK: - UIPickerViewDelegate
 extension SettingsViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return UpdateFrequenciesInMins(rawValue: row)?.getTextDescription()
+        return UpdateFrequencies(rawValue: row)?.getTextDescription()
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if let selectedFrequency = UpdateFrequenciesInMins(rawValue: row) {
+        if let selectedFrequency = UpdateFrequencies(rawValue: row) {
             viewModel?.selectedFrequency = selectedFrequency
         }
     }
@@ -182,7 +182,7 @@ extension SettingsViewController: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        UpdateFrequenciesInMins.allCases.count
+        UpdateFrequencies.allCases.count
     }
 }
 
