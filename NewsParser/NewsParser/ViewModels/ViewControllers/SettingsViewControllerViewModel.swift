@@ -19,22 +19,61 @@ protocol SettingsViewControllerViewModel {
     func getNewsSourceTitleOrLink(at index: Int) -> String?
     func isSourceVisible(at index: Int) -> Bool
     func toggleNewsSourceVisibility(at index: Int)
-    
-    func getDescriptionForFrequency(frequency: UpdateFrequenciesInMins) -> String
 }
 
-enum UpdateFrequenciesInMins: Int {
-    case fiveMin = 5
-    case fifteenMin = 15
-    case halfHour = 30
-    case hour = 60
-    case sixHours = 360
-    case twelveHours = 720
-    case day = 1440
+enum UpdateFrequenciesInMins: Int, CaseIterable {
+    case fiveMin = 0, fifteenMin, halfHour, hour, sixHours, twelveHours, day
+    
+    func getIntValue() -> Int {
+        switch self {
+        case .fiveMin:
+            return 5
+        case .fifteenMin:
+            return 15
+        case .halfHour:
+            return 30
+        case .hour:
+            return 60
+        case .sixHours:
+            return 360
+        case .twelveHours:
+            return 720
+        case .day:
+            return 1440
+        }
+    }
+    
+    func getTextDescription() -> String {
+        switch self {
+        case .fiveMin:
+            return "5 минут"
+        case .fifteenMin:
+            return "15 минут"
+        case .halfHour:
+            return "30 минут"
+        case .hour:
+            return "1 час"
+        case .sixHours:
+            return "6 часов"
+        case .twelveHours:
+            return "12 часов"
+        case .day:
+            return "день"
+        }
+    }
 }
 
 final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel {
-    var selectedFrequency: UpdateFrequenciesInMins = .fiveMin
+    var selectedFrequency: UpdateFrequenciesInMins {
+        get {
+            let rawValue = (DatabaseManager.shared.retrieveValueFromUD(key: .refreshInterval) as? Int) ?? 0
+            return UpdateFrequenciesInMins(rawValue: rawValue) ?? .fiveMin
+        }
+        set {
+            DatabaseManager.shared.saveValueToUD(key: .refreshInterval, value: newValue.rawValue)
+        }
+    }
+    
     var newsSources: [NewsSource] = Array(DatabaseManager.shared.fetch(NewsSource.self).sorted(by: { $0.dateAdded < $1.dateAdded }))
     
     var delegate: SettingsViewControllerDelegate?
@@ -82,25 +121,6 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
         
         DatabaseManager.shared.update {
             source.isActive.toggle()
-        }
-    }
-    
-    func getDescriptionForFrequency(frequency: UpdateFrequenciesInMins) -> String {
-        switch frequency {
-        case .fiveMin:
-            return "5 минут"
-        case .fifteenMin:
-            return "15 минут"
-        case .halfHour:
-            return "30 минут"
-        case .hour:
-            return "1 час"
-        case .sixHours:
-            return "6 часов"
-        case .twelveHours:
-            return "12 часов"
-        case .day:
-            return "день"
         }
     }
     
