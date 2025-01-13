@@ -29,6 +29,7 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
         }
         set {
             DatabaseManager.shared.saveValueToUD(key: .refreshInterval, value: newValue.rawValue)
+            NotificationCenter.default.post(name: .didChangeRefreshInterval, object: nil)
         }
     }
     

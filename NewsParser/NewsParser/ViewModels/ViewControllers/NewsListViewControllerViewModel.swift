@@ -29,9 +29,12 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
     private var newsItems: [RSSItemRaw] = []
     private var downloadingIds: Set<String> = []
     
+    private var updateTimer: Timer?
+    
     init() {
         fetchSavedRSSItems()
         addNotificationToken()
+        setupObservers()
     }
     
     lazy var networkManager: NetworkManagerProtocol = NetworkManager()
@@ -57,7 +60,7 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
                         predicate = NSPredicate(format: "id IN %@", ids)
                     }
                     
-                    let newsSources = DatabaseManager.shared.fetch(NewsSource.self, predicate: predicate)
+                    let newsSources = DatabaseManager.shared.fetchActiveNewsSources(predicate: predicate)
                     
                     for newsSource in newsSources {
                         let existingLinks = Set(newsSource.news.map { $0.link })
@@ -68,6 +71,7 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
                                 .filter { !existingLinks.contains($0.link) }
                             
                             if items.count > 0 {
+                                DatabaseManager.shared.saveValueToUD(key: .lastRefreshDate, value: Date())
                                 DatabaseManager.shared.update {
                                     if newsSource.name == nil {
                                         newsSource.name = items.first?.sourceTitle
@@ -110,6 +114,7 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
         return downloadingIds.contains(id)
     }
     
+    //MARK: Private methods
     private func fetchSavedRSSItems() {
         if activeSourcesIds.count == 0 {
             activeSourcesIds = Set(Array(DatabaseManager.shared.fetchActiveNewsSources().map { $0.id }))
@@ -190,5 +195,62 @@ final class NewsListViewControllerViewModelImpl: NewsListViewControllerViewModel
                 print("Error in Realm observer: \(error)")
             }
         }
+    }
+    
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: .willEnterForeground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: .didEnterBackground, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didChangeRefreshInterval), name: .didChangeRefreshInterval, object: nil)
+    }
+    
+    @objc private func willEnterForeground() {
+        setupTimer()
+    }
+    
+    @objc private func didEnterBackground() {
+        releaseTimer()
+    }
+    
+    @objc private func didChangeRefreshInterval() {
+        releaseTimer()
+        setupTimer()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+//MARK: - Timer management
+private extension NewsListViewControllerViewModelImpl {
+    private func setupTimer() {
+        guard updateTimer == nil else { return }
+        
+        let lastRefreshDate = DatabaseManager.shared.retrieveValueFromUD(key: .lastRefreshDate) as? Date ?? Date()
+        let frequency = UpdateFrequencies(rawValue: (DatabaseManager.shared.retrieveValueFromUD(key: .refreshInterval) as? Int ?? 0))
+        let savedTimeInterval = Double((frequency?.getIntValue() ?? UpdateFrequencies.fiveMin.getIntValue()) * 60)
+        
+        let timeDiff = (Date().timeIntervalSince1970 - lastRefreshDate.timeIntervalSince1970)
+        let timeInterval = savedTimeInterval - timeDiff
+        
+        if timeInterval < 0 {
+            fetchSources()
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self, self.updateTimer == nil else { return }
+                self.updateTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.fetchSourcesFromTimer), userInfo: nil, repeats: true)
+            }
+        }
+    }
+    
+    private func releaseTimer() {
+        updateTimer?.invalidate()
+        updateTimer = nil
+    }
+    
+    @objc private func fetchSourcesFromTimer() {
+        fetchSources()
     }
 }
