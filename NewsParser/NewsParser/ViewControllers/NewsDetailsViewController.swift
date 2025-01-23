@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SafariServices
 
 final class NewsDetailsViewController: UIViewController {
     var viewModel: NewsDetailsViewControllerViewModel? = nil
@@ -47,6 +48,15 @@ final class NewsDetailsViewController: UIViewController {
         imageView.backgroundColor = UIColor(white: 0.3, alpha: 0.3)
         
         return imageView
+    }()
+    
+    private var newsUrlButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.systemBlue, for: .normal)
+        
+        return button
     }()
     
     private var sourceTitleLabel: UILabel = {
@@ -99,12 +109,23 @@ final class NewsDetailsViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        newsUrlButton.addTarget(self, action: #selector(newsLinkWasPressed), for: .touchUpInside)
         
         addSubviews()
         setupConstraints()
         configure()
         
         setupNotificationObservers()
+    }
+    
+    @objc private func newsLinkWasPressed() {
+        guard let link = viewModel?.link, let url = URL(string: link) else { return }
+        
+        let safariController = SFSafariViewController(url: url)
+        safariController.overrideUserInterfaceStyle = .light
+        safariController.modalPresentationStyle = .pageSheet
+        
+        self.present(safariController, animated: true)
     }
     
     // Set value the same as it is in the other progress view
@@ -119,7 +140,7 @@ final class NewsDetailsViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(scrollContentView)
         
-        [newsTitleLabel, imageView, sourceTitleLabel, dateLabel, textView, downloadProgressView].forEach {
+        [newsTitleLabel, imageView, newsUrlButton, sourceTitleLabel, dateLabel, textView, downloadProgressView].forEach {
             scrollContentView.addSubview($0)
         }
     }
@@ -143,10 +164,10 @@ final class NewsDetailsViewController: UIViewController {
             newsTitleLabel.topAnchor.constraint(equalTo: scrollContentView.topAnchor, constant: 12),
             newsTitleLabel.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor, constant: -16),
             
-            imageView.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 48),
+            imageView.leftAnchor.constraint(equalTo: scrollContentView.leftAnchor, constant: 48),
             imageView.topAnchor.constraint(equalTo: newsTitleLabel.bottomAnchor, constant: 6),
             imageView.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor, constant: -48),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.8),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.7),
             
             downloadProgressView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             downloadProgressView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
@@ -160,8 +181,12 @@ final class NewsDetailsViewController: UIViewController {
             dateLabel.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor, constant: -16),
             dateLabel.topAnchor.constraint(equalTo: sourceTitleLabel.topAnchor),
             
+            newsUrlButton.centerXAnchor.constraint(equalTo: scrollContentView.centerXAnchor),
+            newsUrlButton.widthAnchor.constraint(equalToConstant: 250),
+            newsUrlButton.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
+            
             textView.leftAnchor.constraint(equalTo: scrollContentView.leftAnchor),
-            textView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 20),
+            textView.topAnchor.constraint(equalTo: newsUrlButton.bottomAnchor, constant: 10),
             textView.rightAnchor.constraint(equalTo: scrollContentView.rightAnchor),
             textView.bottomAnchor.constraint(lessThanOrEqualTo: scrollContentView.bottomAnchor)
         ])
@@ -188,6 +213,7 @@ final class NewsDetailsViewController: UIViewController {
             }
         }
         
+        newsUrlButton.setTitle("Открыть статью", for: .normal)
         sourceTitleLabel.text = viewModel.sourceTitle
         dateLabel.text = viewModel.pubDate
         textView.text = viewModel.description
