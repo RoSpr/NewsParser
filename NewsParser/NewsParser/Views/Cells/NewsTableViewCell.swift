@@ -59,13 +59,12 @@ final class NewsTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let isReadImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: "checkmark")
-        imageView.tintColor = .systemGray
+    private let isReadView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBlue
         
-        return imageView
+        return view
     }()
     
     private let newsSourceLabel: UILabel = {
@@ -119,10 +118,11 @@ final class NewsTableViewCell: UITableViewCell {
         
         addSubviews()
         setupConstraints()
+        configureUI()
     }
     
     private func addSubviews() {
-        [isReadImageView, newsImageView, downloadProgressView, newsHeaderLabel, newsSourceLabel, dateLabel].forEach {
+        [isReadView, newsImageView, downloadProgressView, newsHeaderLabel, newsSourceLabel, dateLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -142,12 +142,12 @@ final class NewsTableViewCell: UITableViewCell {
             newsHeaderLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             newsHeaderLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12),
             
-            isReadImageView.leftAnchor.constraint(equalTo: newsHeaderLabel.leftAnchor),
-            isReadImageView.centerYAnchor.constraint(equalTo: newsSourceLabel.centerYAnchor),
-            isReadImageView.widthAnchor.constraint(equalToConstant: 12),
-            isReadImageView.heightAnchor.constraint(equalToConstant: 12),
+            isReadView.leftAnchor.constraint(equalTo: newsHeaderLabel.leftAnchor),
+            isReadView.centerYAnchor.constraint(equalTo: newsSourceLabel.centerYAnchor),
+            isReadView.widthAnchor.constraint(equalToConstant: 6),
+            isReadView.heightAnchor.constraint(equalToConstant: 6),
             
-            newsSourceLabel.leftAnchor.constraint(equalTo: isReadImageView.rightAnchor, constant: 4),
+            newsSourceLabel.leftAnchor.constraint(equalTo: isReadView.rightAnchor, constant: 4),
             newsSourceLabel.topAnchor.constraint(equalTo: newsHeaderLabel.bottomAnchor, constant: 4),
             newsSourceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
@@ -157,6 +157,10 @@ final class NewsTableViewCell: UITableViewCell {
             dateLabel.heightAnchor.constraint(equalToConstant: 21),
             dateLabel.widthAnchor.constraint(equalToConstant: 110),
         ])
+    }
+    
+    private func configureUI() {
+        isReadView.layer.cornerRadius = 3
     }
     
     private func configure() {
@@ -185,7 +189,7 @@ final class NewsTableViewCell: UITableViewCell {
     }
     
     private func setIsReadTintColor(isRead: Bool) {
-        self.isReadImageView.tintColor = isRead ? .systemGreen : .systemGray
+        self.isReadView.backgroundColor = isRead ? .systemGray : .systemBlue
     }
     
     override func prepareForReuse() {
@@ -199,7 +203,7 @@ final class NewsTableViewCell: UITableViewCell {
         newsHeaderLabel.text = nil
         newsSourceLabel.text = nil
         dateLabel.text = nil
-        isReadImageView.tintColor = .systemGray
+        isReadView.tintColor = .systemGray
         newsHeaderLeftToCellConstraint.isActive = false
         newsHeaderLeftToImageViewConstraint.isActive = false
     }
