@@ -17,6 +17,8 @@ class ImageCacheManager {
     private let fileManager = FileManager.default
     private var cacheDirectory: URL? = nil
     
+    private var memoryWarningsReceived: Int = 0
+    
     private init() {
         queue.async { [weak self] in
             guard let self = self else { return }
@@ -35,6 +37,15 @@ class ImageCacheManager {
                 self.memoryCache.totalCostLimit = 10 * 1024 * 1024
             }
         }
+    }
+    
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+    }
+    
+    @objc private func didReceiveMemoryWarning() {
+        memoryWarningsReceived += 1
+        memoryCache.removeAllObjects()
     }
     
     private func loadFromDisk(forKey key: String) -> (image: UIImage, bytes: Int)? {
@@ -69,12 +80,18 @@ class ImageCacheManager {
         if let cachedImage = self.memoryCache.object(forKey: id as NSString) {
             image = cachedImage
         } else if let diskImageAndBytes = self.loadFromDisk(forKey: id) {
-            queue.async { [weak self] in
-                self?.memoryCache.setObject(diskImageAndBytes.image, forKey: id as NSString, cost: diskImageAndBytes.bytes)
+            if memoryWarningsReceived < 2 {
+                queue.async { [weak self] in
+                    self?.memoryCache.setObject(diskImageAndBytes.image, forKey: id as NSString, cost: diskImageAndBytes.bytes)
+                }
             }
             image = diskImageAndBytes.image
         }
         
         return image
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
