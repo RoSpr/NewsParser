@@ -31,17 +31,18 @@ class ImageCacheManager {
                 if !self.fileManager.fileExists(atPath: directory.path) {
                     try? self.fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
                 }
+                
+                self.memoryCache.totalCostLimit = 10 * 1024 * 1024
             }
         }
     }
     
-    private func loadFromDisk(forKey key: String) -> UIImage? {
-        var image: UIImage?
-        guard let filePath = cacheDirectory?.appendingPathComponent(key) else { return nil }
-        if let data = try? Data(contentsOf: filePath) {
-            image = UIImage(data: data)
-        }
-        return image
+    private func loadFromDisk(forKey key: String) -> (image: UIImage, bytes: Int)? {
+        guard let filePath = cacheDirectory?.appendingPathComponent(key),
+              let data = try? Data(contentsOf: filePath),
+              let image = UIImage(data: data) else { return nil }
+        
+        return (image, data.count)
     }
     
     func saveToDisk(image: UIImage, forKey key: String) {
@@ -63,15 +64,17 @@ class ImageCacheManager {
     func fetchImage(for id: String?) -> UIImage? {
         guard let id = id else { return nil }
         
+        var image: UIImage? = nil
+        
         if let cachedImage = self.memoryCache.object(forKey: id as NSString) {
-            return cachedImage
-        } else if let diskImage = self.loadFromDisk(forKey: id) {
+            image = cachedImage
+        } else if let diskImageAndBytes = self.loadFromDisk(forKey: id) {
             queue.async { [weak self] in
-                self?.memoryCache.setObject(diskImage, forKey: id as NSString)
+                self?.memoryCache.setObject(diskImageAndBytes.image, forKey: id as NSString, cost: diskImageAndBytes.bytes)
             }
-            return diskImage
-        } else {
-            return nil
+            image = diskImageAndBytes.image
         }
+        
+        return image
     }
 }
