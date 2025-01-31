@@ -213,7 +213,7 @@ final class NewsDetailsViewController: UIViewController {
             }
         }
         
-        newsUrlButton.setTitle("Открыть статью", for: .normal)
+        newsUrlButton.setTitle("Open_article".localized(), for: .normal)
         sourceTitleLabel.text = viewModel.sourceTitle
         dateLabel.text = viewModel.pubDate
 

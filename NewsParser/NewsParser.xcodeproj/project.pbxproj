@@ -26,6 +26,8 @@
 		227CA4412D230C2700D967C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA42C2D230C2700D967C5 /* AppDelegate.swift */; };
 		227CA4422D230C2700D967C5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA42F2D230C2700D967C5 /* SceneDelegate.swift */; };
 		227CA4432D230C2700D967C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 227CA42D2D230C2700D967C5 /* Assets.xcassets */; };
+		22CBC9482D4D2FDA00910352 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */; };
+		22CBC94A2D4D483000910352 /* Bundle_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC9492D4D483000910352 /* Bundle_Extensions.swift */; };
 		22D42F772D352DC100B3D685 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */; };
 		22D42F792D352DF300B3D685 /* UpdateFrequencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */; };
 		22F70E602D25B5780020C807 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E5F2D25B5780020C807 /* ImageCacheManager.swift */; };
@@ -60,6 +62,8 @@
 		227CA42F2D230C2700D967C5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		227CA4462D23137800D967C5 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		227CA4482D23137800D967C5 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		22CBC9492D4D483000910352 /* Bundle_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle_Extensions.swift; sourceTree = "<group>"; };
 		22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFrequencies.swift; sourceTree = "<group>"; };
 		22EFD9AD2D18A6D900E8B1AF /* NewsParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +97,7 @@
 				22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */,
 				22F70E692D317A180020C807 /* UINavigationController+Extensions.swift */,
 				22F70E6B2D3450E50020C807 /* String+Extensions.swift */,
+				22CBC9492D4D483000910352 /* Bundle_Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -196,6 +201,7 @@
 				227CA42D2D230C2700D967C5 /* Assets.xcassets */,
 				227CA42E2D230C2700D967C5 /* Info.plist */,
 				227CA42F2D230C2700D967C5 /* SceneDelegate.swift */,
+				22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */,
 			);
 			path = NewsParser;
 			sourceTree = "<group>";
@@ -289,6 +295,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 22EFD9A42D18A6D800E8B1AF;
 			minimizedProjectReferenceProxies = 1;
@@ -307,6 +314,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22CBC9482D4D2FDA00910352 /* Localizable.xcstrings in Resources */,
 				227CA4432D230C2700D967C5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,6 +380,7 @@
 				227CA4372D230C2700D967C5 /* RSSItem.swift in Sources */,
 				22F70E682D31673D0020C807 /* SettingsViewControllerViewModel.swift in Sources */,
 				22298B172D2450BC008ECB45 /* URLSession+Extensions.swift in Sources */,
+				22CBC94A2D4D483000910352 /* Bundle_Extensions.swift in Sources */,
 				22F70E662D2C251A0020C807 /* NSNotificationName+Extensions.swift in Sources */,
 				22D42F772D352DC100B3D685 /* UserDefaultsKeys.swift in Sources */,
 				227CA4382D230C2700D967C5 /* NewsListViewControllerDelegate.swift in Sources */,
@@ -511,6 +520,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -567,6 +577,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

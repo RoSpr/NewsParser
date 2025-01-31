@@ -32,19 +32,19 @@ enum UpdateFrequencies: Int, CaseIterable {
     func getTextDescription() -> String {
         switch self {
         case .fiveMin:
-            return "5 минут"
+            return "Minutes".localized("5")
         case .fifteenMin:
-            return "15 минут"
+            return "Minutes".localized("15")
         case .halfHour:
-            return "30 минут"
+            return "Minutes".localized("30")
         case .hour:
-            return "1 час"
+            return "Hour".localized()
         case .sixHours:
-            return "6 часов"
+            return "Hours".localized("6")
         case .twelveHours:
-            return "12 часов"
+            return "Hours".localized("12")
         case .day:
-            return "день"
+            return "Day".localized()
         }
     }
 }

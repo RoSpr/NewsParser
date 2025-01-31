@@ -51,7 +51,7 @@ struct Utils {
         
         controller.addTextField() { textfield in
             textfield.delegate = textfieldDelegate
-            textfield.placeholder = "Введите URL"
+            textfield.placeholder = "Enter_url".localized()
         }
         
         let action = UIAlertAction(title: actionTitle, style: actionStyle, handler: { _ in

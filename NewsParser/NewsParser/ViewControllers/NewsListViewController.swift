@@ -61,7 +61,7 @@ final class NewsListViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationItem.title = "Новости"
+        navigationItem.title = "News".localized()
         navigationController?.navigationBar.prefersLargeTitles = true
         
         let appearance = UINavigationBarAppearance()
@@ -84,9 +84,9 @@ final class NewsListViewController: UIViewController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.placeholder = "Search".localized()
         searchController.searchBar.overrideUserInterfaceStyle = .light
-        searchController.searchBar.setValue("Отмена", forKey: "cancelButtonText")
+        searchController.searchBar.setValue("Cancel".localized(), forKey: "cancelButtonText")
         navigationItem.searchController = searchController
         
         let refreshNewsItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshNews))
@@ -101,7 +101,7 @@ final class NewsListViewController: UIViewController {
     }
     
     @objc private func addNewSource() {
-        Utils.addPopupWithTextfield(parent: self, title: nil, message: "Введите ссылку на новый источник RSS новостей", textfieldDelegate: self, actionTitle: "Добавить", actionStyle: .default, cancelTitle: "Отмена", actionHandler: { [weak self] in
+        Utils.addPopupWithTextfield(parent: self, title: nil, message: "Enter_new_RSS_source".localized(), textfieldDelegate: self, actionTitle: "Add".localized(), actionStyle: .default, cancelTitle: "Cancel".localized(), actionHandler: { [weak self] in
             guard let self = self, let addedStringUrl = insertedStringUrl else { return }
             self.insertedStringUrl = nil
             
@@ -115,12 +115,12 @@ final class NewsListViewController: UIViewController {
                         DatabaseManager.shared.add(newSource)
                     } else {
                         DispatchQueue.main.async {
-                            Utils.makePopUp(parent: self, title: "Ошибка", message: "Источник \'\(addedStringUrl)\' уже был добавлен", actionTitle: "Ок", actionStyle: .default)
+                            Utils.makePopUp(parent: self, title: "Error".localized(), message: "Source_was_already_added".localized(addedStringUrl), actionTitle: "Ok".localized(), actionStyle: .default)
                         }
                     }
                 }
             } else {
-                Utils.makePopUp(parent: self, title: "Ошибка", message: "Введенный URL не является верным", actionTitle: "Ок", actionStyle: .default)
+                Utils.makePopUp(parent: self, title: "Error".localized(), message: "URL_is_not_correct".localized(), actionTitle: "Ok".localized(), actionStyle: .default)
             }
         }, cancelHandler: nil)
     }

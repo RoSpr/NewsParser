@@ -48,7 +48,7 @@ final class SettingsViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationItem.title = "Настройки"
+        navigationItem.title = "Settings".localized()
         navigationController?.navigationBar.prefersLargeTitles = true
         
         let appearance = UINavigationBarAppearance()
@@ -86,7 +86,7 @@ extension SettingsViewController: UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
-            cell.textLabel?.text = "Частота обновления"
+            cell.textLabel?.text = "Refresh_frequency".localized()
             cell.detailTextLabel?.text = viewModel?.selectedFrequency.getTextDescription()
             cell.accessoryType = .disclosureIndicator
         case 1:
@@ -95,7 +95,7 @@ extension SettingsViewController: UITableViewDataSource {
             cell.textLabel?.text = viewModel?.getNewsSourceTitleOrLink(at: indexPath.row)
             cell.accessoryType = isVisible ? .checkmark : .none
         case 2:
-            cell.textLabel?.text = "Очистить кэш"
+            cell.textLabel?.text = "Clear_cache".localized()
             cell.textLabel?.textColor = .red
         default: break
         }
@@ -106,11 +106,11 @@ extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return "Обновления"
+            return "Updates".localized()
         case 1:
-            return "Источники новостей"
+            return "News_sources".localized()
         case 2:
-            return "Кэш"
+            return "Cache".localized()
         default: return nil
         }
     }
@@ -128,7 +128,7 @@ extension SettingsViewController: UITableViewDelegate {
             
             viewModel?.toggleNewsSourceVisibility(at: indexPath.row)
         case 2:
-            Utils.makePopUp(parent: self, title: nil, message: "Удалить кэш?", actionTitle: "Удалить", actionStyle: .destructive, cancelTitle: "Отмена", actionHandler: {
+            Utils.makePopUp(parent: self, title: nil, message: "Clear_cache_question".localized(), actionTitle: "Delete".localized(), actionStyle: .destructive, cancelTitle: "Cancel".localized(), actionHandler: {
                 DatabaseManager.shared.deleteAll()
             })
         default: break
@@ -138,7 +138,7 @@ extension SettingsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-            let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] (action, view, completionHandler) in
+            let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized()) { [weak self] (action, view, completionHandler) in
                 self?.viewModel?.deleteSource(at: indexPath.row)
                 completionHandler(true)
             }
@@ -203,7 +203,7 @@ private extension SettingsViewController {
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.overrideUserInterfaceStyle = .light
         
-        let alertController = UIAlertController(title: "Выберите частоту обновления", message: "\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: "Select_refresh_frequency".localized(), message: "\n\n\n\n\n\n\n", preferredStyle: .actionSheet)
         alertController.overrideUserInterfaceStyle = .light
         
         alertController.view.addSubview(picker)
@@ -215,8 +215,8 @@ private extension SettingsViewController {
             picker.bottomAnchor.constraint(equalTo: alertController.view.bottomAnchor, constant: -110)
         ])
         
-        alertController.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "Выбрать", style: .default, handler: { [weak self] _ in
+        alertController.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Select".localized(), style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
             if let selectedFrequency = UpdateFrequencies(rawValue: picker.selectedRow(inComponent: 0)) {
                 self.viewModel?.selectedFrequency = selectedFrequency
