@@ -41,7 +41,7 @@ final class NewsCellViewModelImpl: NewsCellViewModel {
     init(realmId: String, newsHeader: String, newsSource: String, date: Date, hasImage: Bool, isRead: Bool) {
         self.realmId = realmId
         self.hasImage = hasImage
-        self.newsHeader = newsHeader
+        self.newsHeader = newsHeader.removeHTMLTags()
         self.newsSource = newsSource
         self.newsDate = Utils.getStringFromDate(date)
         self.isRead = isRead

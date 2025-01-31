@@ -216,7 +216,8 @@ final class NewsDetailsViewController: UIViewController {
         newsUrlButton.setTitle("Открыть статью", for: .normal)
         sourceTitleLabel.text = viewModel.sourceTitle
         dateLabel.text = viewModel.pubDate
-        textView.text = viewModel.description
+
+        textView.attributedText = viewModel.description
     }
     
     private func activateTopConstraint(hasImage: Bool) {

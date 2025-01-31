@@ -11,7 +11,7 @@ import UIKit
 protocol NewsDetailsViewControllerViewModel {
     var title: String { get }
     var sourceTitle: String { get }
-    var description: String { get }
+    var description: NSAttributedString { get }
     var hasImage: Bool { get }
     var image: UIImage? { get }
     var pubDate: String? { get }
@@ -23,15 +23,15 @@ final class NewsDetailsViewControllerViewModelImpl: NewsDetailsViewControllerVie
     private var rssItem: RSSItemRaw
     
     var title: String {
-        rssItem.title
+        rssItem.title.removeHTMLTags()
     }
     
     var sourceTitle: String {
-        rssItem.sourceTitle
+        rssItem.sourceTitle.removeHTMLTags()
     }
     
-    var description: String {
-        rssItem.description ?? ""
+    var description: NSAttributedString {
+        rssItem.description?.toAttributedString() ?? NSAttributedString(string: "")
     }
     
     var hasImage: Bool {
