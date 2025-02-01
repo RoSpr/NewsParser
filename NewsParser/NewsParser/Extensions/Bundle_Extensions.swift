@@ -7,11 +7,9 @@
 
 import Foundation
 
-fileprivate let selectedLanguageUDKey = "selectedLanguage_UDKey"
-
 extension Bundle {
     static var localized: Bundle {
-        if let path = UserDefaults.standard.string(forKey: selectedLanguageUDKey),
+        if let path = DatabaseManager.shared.retrieveValueFromUD(key: .selectedLanguage) as? String,
            let bundlePath = Bundle.main.path(forResource: path, ofType: "lproj"),
            let bundle = Bundle(path: bundlePath) {
             return bundle
@@ -20,8 +18,7 @@ extension Bundle {
     }
     
     class func setLanguage(_ language: String) {
-        UserDefaults.standard.set(language, forKey: selectedLanguageUDKey)
-        UserDefaults.standard.synchronize()
+        DatabaseManager.shared.saveValueToUD(key: .selectedLanguage, value: language)
 
         object_setClass(Bundle.main, type(of: localized))
     }
