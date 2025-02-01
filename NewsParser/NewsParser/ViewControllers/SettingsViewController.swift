@@ -84,18 +84,22 @@ extension SettingsViewController: UITableViewDataSource {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
         cell.overrideUserInterfaceStyle = .light
         
-        switch indexPath.section {
-        case 0:
-            cell.textLabel?.text = "Refresh_frequency".localized()
+        let sectionType = viewModel?.getSectionType(indexPath.section)
+        cell.textLabel?.text = sectionType?.getCellText()
+        
+        switch sectionType {
+        case .updates:
             cell.detailTextLabel?.text = viewModel?.selectedFrequency.getTextDescription()
             cell.accessoryType = .disclosureIndicator
-        case 1:
+        case .languages:
+            cell.detailTextLabel?.text = viewModel?.selectedLanguage.description()
+            cell.accessoryType = .disclosureIndicator
+        case .newsSources:
             let isVisible = viewModel?.isSourceVisible(at: indexPath.row) ?? false
             
             cell.textLabel?.text = viewModel?.getNewsSourceTitleOrLink(at: indexPath.row)
             cell.accessoryType = isVisible ? .checkmark : .none
-        case 2:
-            cell.textLabel?.text = "Clear_cache".localized()
+        case .cache:
             cell.textLabel?.textColor = .red
         default: break
         }
@@ -104,30 +108,26 @@ extension SettingsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return "Updates".localized()
-        case 1:
-            return "News_sources".localized()
-        case 2:
-            return "Cache".localized()
-        default: return nil
-        }
+        return viewModel?.getTitleForHeader(in: section) ?? nil
     }
 }
 
 //MARK: - UItabelViewDelegate
 extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0:
+        let sectionType = viewModel?.getSectionType(indexPath.section)
+        
+        switch sectionType {
+        case .updates:
             presentPickerView()
-        case 1:
+        case .languages:
+            //TODO: Add language selection
+        case .newsSources:
             let cell = tableView.cellForRow(at: indexPath)
             cell?.accessoryType == .checkmark ? (cell?.accessoryType = .none) : (cell?.accessoryType = .checkmark)
             
             viewModel?.toggleNewsSourceVisibility(at: indexPath.row)
-        case 2:
+        case .cache:
             Utils.makePopUp(parent: self, title: nil, message: "Clear_cache_question".localized(), actionTitle: "Delete".localized(), actionStyle: .destructive, cancelTitle: "Cancel".localized(), actionHandler: {
                 DatabaseManager.shared.deleteAll()
             })
@@ -138,17 +138,17 @@ extension SettingsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized()) { [weak self] (action, view, completionHandler) in
-                self?.viewModel?.deleteSource(at: indexPath.row)
-                completionHandler(true)
-            }
-            
-            deleteAction.backgroundColor = .red
-            
-            let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-            configuration.performsFirstActionWithFullSwipe = true
-            return configuration
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized()) { [weak self] (action, view, completionHandler) in
+            self?.viewModel?.deleteSource(at: indexPath.row)
+            completionHandler(true)
         }
+        
+        deleteAction.backgroundColor = .red
+        
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
+    }
 }
 
 //MARK: - UITabBarControllerDelegate

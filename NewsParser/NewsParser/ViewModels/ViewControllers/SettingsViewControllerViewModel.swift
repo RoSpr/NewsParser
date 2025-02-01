@@ -11,10 +11,16 @@ protocol SettingsViewControllerViewModel {
     var selectedFrequency: UpdateFrequencies { get set }
     var newsSources: [NewsSource] { get }
     
+    var selectedLanguage: SupportedLanguages { get }
+    
     var delegate: SettingsViewControllerDelegate? { get set }
     
     var numberOfSections: Int { get }
     func numberOfRowsIn(section: Int) -> Int
+    
+    func getSectionType(_ section: Int) -> SettingsSections?
+    
+    func getTitleForHeader(in section: Int) -> String?
     
     func getNewsSourceTitleOrLink(at index: Int) -> String?
     func isSourceVisible(at index: Int) -> Bool
@@ -37,10 +43,15 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
     
     var newsSources: [NewsSource] = Array(DatabaseManager.shared.fetch(NewsSource.self).sorted(by: { $0.dateAdded < $1.dateAdded }))
     
+    var selectedLanguage: SupportedLanguages {
+        let language = DatabaseManager.shared.retrieveValueFromUD(key: .selectedLanguage) as? String ?? "en"
+        return SupportedLanguages(rawValue: language) ?? .en
+    }
+    
     var delegate: SettingsViewControllerDelegate?
     
     var numberOfSections: Int {
-        return 3
+        return SettingsSections.allCases.count
     }
     
     init() {
@@ -48,18 +59,24 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
     }
     
     func numberOfRowsIn(section: Int) -> Int {
-        guard section < numberOfSections else { return 0 }
+        guard let sectionType = getSectionType(section) else { return 0 }
         
-        switch section {
-        case 0:
-            return 1
-        case 1:
+        switch sectionType {
+        case .newsSources:
             return newsSources.count
-        case 2:
-            return 1
         default:
-            return 0
+            return sectionType.getNumberOfRows()
         }
+    }
+    
+    func getSectionType(_ section: Int) -> SettingsSections? {
+        return SettingsSections(rawValue: section) ?? nil
+    }
+    
+    func getTitleForHeader(in section: Int) -> String? {
+        guard let sectionType = getSectionType(section) else { return nil }
+        
+        return sectionType.getTitle()
     }
     
     func getNewsSourceTitleOrLink(at index: Int) -> String? {
