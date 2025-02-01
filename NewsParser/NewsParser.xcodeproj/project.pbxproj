@@ -29,6 +29,7 @@
 		22CBC9482D4D2FDA00910352 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */; };
 		22CBC94A2D4D483000910352 /* Bundle_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC9492D4D483000910352 /* Bundle_Extensions.swift */; };
 		22CBC94C2D4E60CA00910352 /* SupportedLanguages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC94B2D4E60C400910352 /* SupportedLanguages.swift */; };
+		22CBC94E2D4E632400910352 /* SettingsSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC94D2D4E631F00910352 /* SettingsSections.swift */; };
 		22D42F772D352DC100B3D685 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */; };
 		22D42F792D352DF300B3D685 /* UpdateFrequencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */; };
 		22F70E602D25B5780020C807 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E5F2D25B5780020C807 /* ImageCacheManager.swift */; };
@@ -66,6 +67,7 @@
 		22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		22CBC9492D4D483000910352 /* Bundle_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle_Extensions.swift; sourceTree = "<group>"; };
 		22CBC94B2D4E60C400910352 /* SupportedLanguages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedLanguages.swift; sourceTree = "<group>"; };
+		22CBC94D2D4E631F00910352 /* SettingsSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSections.swift; sourceTree = "<group>"; };
 		22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFrequencies.swift; sourceTree = "<group>"; };
 		22EFD9AD2D18A6D900E8B1AF /* NewsParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -211,6 +213,7 @@
 		22D42F752D352DAF00B3D685 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				22CBC94D2D4E631F00910352 /* SettingsSections.swift */,
 				22CBC94B2D4E60C400910352 /* SupportedLanguages.swift */,
 				22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */,
 				22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */,
@@ -386,6 +389,7 @@
 				22CBC94A2D4D483000910352 /* Bundle_Extensions.swift in Sources */,
 				22F70E662D2C251A0020C807 /* NSNotificationName+Extensions.swift in Sources */,
 				22D42F772D352DC100B3D685 /* UserDefaultsKeys.swift in Sources */,
+				22CBC94E2D4E632400910352 /* SettingsSections.swift in Sources */,
 				227CA4382D230C2700D967C5 /* NewsListViewControllerDelegate.swift in Sources */,
 				227CA4392D230C2700D967C5 /* NewsDetailsViewController.swift in Sources */,
 				22F70E6A2D317A180020C807 /* UINavigationController+Extensions.swift in Sources */,
