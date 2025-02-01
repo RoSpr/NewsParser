@@ -12,7 +12,7 @@ final class SettingsViewController: UIViewController {
     var viewModel: SettingsViewControllerViewModel?
     
     private let tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.overrideUserInterfaceStyle = .light
         
