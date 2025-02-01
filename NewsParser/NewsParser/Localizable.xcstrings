@@ -120,6 +120,23 @@
         }
       }
     },
+    "English" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "английский"
+          }
+        }
+      }
+    },
     "Enter_new_RSS_source" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -303,6 +320,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Частота обновления"
+          }
+        }
+      }
+    },
+    "Russian" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Russian"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "русский"
           }
         }
       }
