@@ -117,7 +117,7 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
             switch changes {
             case .initial(_):
                 break
-            case .update(let allElements, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+            case .update(let allElements, deletions: _, insertions: _, modifications: _):
                 self.newsSources = Array(allElements).sorted(by: { $0.dateAdded < $1.dateAdded })
                 self.delegate?.reloadSources()
             case .error(let error):

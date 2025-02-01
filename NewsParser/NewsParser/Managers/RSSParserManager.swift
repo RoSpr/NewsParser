@@ -19,7 +19,7 @@ final class RSSParserManager: RSSParserManagerProtocol {
             throw URLError(.badURL)
         }
         
-        let (data, response, error) = URLSession.shared.synchronousDataTask(with: url)
+        let (data, _, _) = URLSession.shared.synchronousDataTask(with: url)
         
         return parseRSS(data: data)
     }
