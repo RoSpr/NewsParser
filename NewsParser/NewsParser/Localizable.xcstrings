@@ -222,6 +222,23 @@
         }
       }
     },
+    "Languages" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Languages"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Языки"
+          }
+        }
+      }
+    },
     "Minutes" : {
       "extractionState" : "manual",
       "localizations" : {
