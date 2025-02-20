@@ -122,6 +122,7 @@ extension SettingsViewController: UITableViewDelegate {
             presentPickerView()
         case .languages:
             //TODO: Add language selection
+            break
         case .newsSources:
             let cell = tableView.cellForRow(at: indexPath)
             cell?.accessoryType == .checkmark ? (cell?.accessoryType = .none) : (cell?.accessoryType = .checkmark)
