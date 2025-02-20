@@ -17,6 +17,8 @@ final class SettingDetailViewController: UITableViewController {
         
         tableView.allowsMultipleSelection = false
         tableView.overrideUserInterfaceStyle = .light
+        
+        self.navigationItem.title = viewModel.title
     }
     
     required init?(coder: NSCoder) {

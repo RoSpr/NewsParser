@@ -8,6 +8,7 @@
 import UIKit
 
 protocol SettingDetailViewModel {
+    var title: String? { get }
     var numberOfSections: Int { get }
     var previouslySelectedRowIndex: IndexPath { get }
     

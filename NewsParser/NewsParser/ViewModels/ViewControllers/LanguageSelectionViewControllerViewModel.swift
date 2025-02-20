@@ -8,6 +8,7 @@
 import UIKit
 
 final class LanguageSelectionViewControllerViewModel: SettingDetailViewModel {
+    var title: String? = "LanguageSelection".localized()
     var numberOfSections: Int = 1
     var previouslySelectedRowIndex: IndexPath
     
