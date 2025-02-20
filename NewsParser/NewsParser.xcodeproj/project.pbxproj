@@ -26,6 +26,9 @@
 		227CA4412D230C2700D967C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA42C2D230C2700D967C5 /* AppDelegate.swift */; };
 		227CA4422D230C2700D967C5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA42F2D230C2700D967C5 /* SceneDelegate.swift */; };
 		227CA4432D230C2700D967C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 227CA42D2D230C2700D967C5 /* Assets.xcassets */; };
+		228900DA2D67B57400A946DD /* SettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228900D92D67B56C00A946DD /* SettingDetailViewController.swift */; };
+		228900DE2D67B6DD00A946DD /* SettingDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228900DD2D67B6A800A946DD /* SettingDetailViewModel.swift */; };
+		228900E12D67BB5F00A946DD /* LanguageSelectionViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModel.swift */; };
 		22CBC9482D4D2FDA00910352 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */; };
 		22CBC94A2D4D483000910352 /* Bundle_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC9492D4D483000910352 /* Bundle_Extensions.swift */; };
 		22CBC94C2D4E60CA00910352 /* SupportedLanguages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC94B2D4E60C400910352 /* SupportedLanguages.swift */; };
@@ -64,6 +67,9 @@
 		227CA42F2D230C2700D967C5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		227CA4462D23137800D967C5 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		227CA4482D23137800D967C5 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		228900D92D67B56C00A946DD /* SettingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailViewController.swift; sourceTree = "<group>"; };
+		228900DD2D67B6A800A946DD /* SettingDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailViewModel.swift; sourceTree = "<group>"; };
+		228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectionViewControllerViewModel.swift; sourceTree = "<group>"; };
 		22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		22CBC9492D4D483000910352 /* Bundle_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle_Extensions.swift; sourceTree = "<group>"; };
 		22CBC94B2D4E60C400910352 /* SupportedLanguages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedLanguages.swift; sourceTree = "<group>"; };
@@ -131,6 +137,7 @@
 		227CA41D2D230C2700D967C5 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				228900DB2D67B69200A946DD /* ViewModels */,
 				227CA41C2D230C2700D967C5 /* NewsListViewControllerDelegate.swift */,
 			);
 			path = Protocols;
@@ -139,6 +146,7 @@
 		227CA4212D230C2700D967C5 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				228900D92D67B56C00A946DD /* SettingDetailViewController.swift */,
 				227CA41E2D230C2700D967C5 /* NewsDetailsViewController.swift */,
 				227CA41F2D230C2700D967C5 /* NewsListViewController.swift */,
 				227CA4202D230C2700D967C5 /* SettingsViewController.swift */,
@@ -157,6 +165,7 @@
 		227CA4262D230C2700D967C5 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModel.swift */,
 				22F70E632D2705780020C807 /* NewsListViewControllerViewModel.swift */,
 				227CA4242D230C2700D967C5 /* NewsDetailsViewControllerViewModel.swift */,
 				22F70E672D31673D0020C807 /* SettingsViewControllerViewModel.swift */,
@@ -208,6 +217,22 @@
 				22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */,
 			);
 			path = NewsParser;
+			sourceTree = "<group>";
+		};
+		228900DB2D67B69200A946DD /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				228900DC2D67B69D00A946DD /* ViewControllers */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		228900DC2D67B69D00A946DD /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				228900DD2D67B6A800A946DD /* SettingDetailViewModel.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		22D42F752D352DAF00B3D685 /* Enums */ = {
@@ -384,6 +409,7 @@
 				227CA4352D230C2700D967C5 /* Utils.swift in Sources */,
 				227CA4362D230C2700D967C5 /* NewsSource.swift in Sources */,
 				227CA4372D230C2700D967C5 /* RSSItem.swift in Sources */,
+				228900DA2D67B57400A946DD /* SettingDetailViewController.swift in Sources */,
 				22F70E682D31673D0020C807 /* SettingsViewControllerViewModel.swift in Sources */,
 				22298B172D2450BC008ECB45 /* URLSession+Extensions.swift in Sources */,
 				22CBC94A2D4D483000910352 /* Bundle_Extensions.swift in Sources */,
@@ -401,7 +427,9 @@
 				227CA43F2D230C2700D967C5 /* NewsTableViewCell.swift in Sources */,
 				22CBC94C2D4E60CA00910352 /* SupportedLanguages.swift in Sources */,
 				227CA4402D230C2700D967C5 /* CircularProgressBarView.swift in Sources */,
+				228900DE2D67B6DD00A946DD /* SettingDetailViewModel.swift in Sources */,
 				227CA4412D230C2700D967C5 /* AppDelegate.swift in Sources */,
+				228900E12D67BB5F00A946DD /* LanguageSelectionViewControllerViewModel.swift in Sources */,
 				227CA4422D230C2700D967C5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
