@@ -136,8 +136,9 @@ extension SettingsViewController: UITableViewDelegate {
         case .updates:
             presentPickerView()
         case .languages:
-            //TODO: Add language selection
-            break
+            let langViewModel = LanguageSelectionViewControllerViewModel()
+            let viewController = SettingDetailViewController(viewModel: langViewModel)
+            self.navigationController?.pushViewController(viewController, animated: true)
         case .initialSources:
             didTapSourcePresetSelection()
         case .newsSources:
