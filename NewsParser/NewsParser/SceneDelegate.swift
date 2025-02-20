@@ -36,6 +36,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         NotificationCenter.default.post(name: .didEnterBackground, object: nil)
     }
     
+    func recreateRootControllers() {
+        let tabBarController = createTabBarController()
+        let newsNavigationController = createNewsNavigationController()
+        let settingsNavigationController = createSettingsNavigationController()
+        
+        tabBarController.viewControllers = [newsNavigationController, settingsNavigationController]
+        
+        tabBarController.view.backgroundColor = .clear
+        tabBarController.selectedViewController = settingsNavigationController
+        
+        let transition = CATransition()
+        transition.type = .fade
+        transition.duration = 0.3
+        window?.layer.add(transition, forKey: kCATransition)
+        
+        window?.rootViewController = tabBarController
+    }
+    
     private func createTabBarController() -> UITabBarController {
         let tabBarController = UITabBarController()
         let tabBar = tabBarController.tabBar
