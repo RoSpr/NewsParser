@@ -14,6 +14,8 @@ struct Utils {
         
         let formatter = DateFormatter()
         formatter.dateFormat = format
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone.current
         
         return formatter.date(from: string)
     }
@@ -22,6 +24,8 @@ struct Utils {
         guard let date else { return nil }
         
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone.current
         formatter.dateFormat = format
         
         return formatter.string(from: date)
