@@ -68,6 +68,21 @@ final class SettingsViewController: UIViewController {
         
         navigationController?.navigationBar.standardAppearance = appearance
     }
+    
+    private func didTapSourcePresetSelection() {
+        //TODO: Add an option to select sources
+        if DatabaseManager.shared.fetch(NewsSource.self).count == 0 {
+            let firstSource = NewsSource()
+            firstSource.stringURL = "https://www.vedomosti.ru/rss/articles.xml"
+            
+            let secondSource = NewsSource()
+            secondSource.stringURL = "https://news.ru/rss/"
+            
+            [firstSource, secondSource].forEach {
+                DatabaseManager.shared.add($0)
+            }
+        }
+    }
 }
 
 //MARK: - UITableViewDataSource
@@ -123,6 +138,8 @@ extension SettingsViewController: UITableViewDelegate {
         case .languages:
             //TODO: Add language selection
             break
+        case .initialSources:
+            didTapSourcePresetSelection()
         case .newsSources:
             let cell = tableView.cellForRow(at: indexPath)
             cell?.accessoryType == .checkmark ? (cell?.accessoryType = .none) : (cell?.accessoryType = .checkmark)
@@ -170,7 +187,7 @@ protocol SettingsViewControllerDelegate {
 
 extension SettingsViewController: SettingsViewControllerDelegate {
     func reloadSources() {
-        tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+        tableView.reloadSections(IndexSet(integer: SettingsSections.newsSources.rawValue), with: .none)
     }
 }
 

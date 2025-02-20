@@ -18,6 +18,23 @@
         }
       }
     },
+    "Add_sources" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add sources"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить источники"
+          }
+        }
+      }
+    },
     "Cache" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -24,8 +24,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         tabBarController.view.backgroundColor = .clear
         
-        createInitialRSSSourcesIfNeeded()
-        
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
@@ -75,19 +73,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         settingsNavigationController.configureAppeearance()
         
         return settingsNavigationController
-    }
-    
-    private func createInitialRSSSourcesIfNeeded() {
-        if DatabaseManager.shared.fetch(NewsSource.self).count == 0 {
-            let firstSource = NewsSource()
-            firstSource.stringURL = "https://www.vedomosti.ru/rss/articles.xml"
-            
-            let secondSource = NewsSource()
-            secondSource.stringURL = "https://news.ru/rss/"
-            
-            [firstSource, secondSource].forEach {
-                DatabaseManager.shared.add($0)
-            }
-        }
     }
 }

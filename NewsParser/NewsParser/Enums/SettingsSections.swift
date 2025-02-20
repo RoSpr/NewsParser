@@ -6,7 +6,7 @@
 //
 
 enum SettingsSections: Int, CaseIterable {
-    case updates = 0, languages, newsSources, cache
+    case updates = 0, languages, initialSources, newsSources, cache
     
     func getTitle() -> String {
         switch self {
@@ -14,8 +14,10 @@ enum SettingsSections: Int, CaseIterable {
             return "Updates".localized()
         case .languages:
             return "Languages".localized()
-        case .newsSources:
+        case .initialSources:
             return "News_sources".localized()
+        case .newsSources:
+            return ""
         case .cache:
             return "Cache".localized()
         }
@@ -27,6 +29,8 @@ enum SettingsSections: Int, CaseIterable {
             return "Refresh_frequency".localized()
         case .languages:
             return "Languages".localized()
+        case .initialSources:
+            return "Add_sources".localized()
         case .newsSources:
             return nil
         case .cache:
