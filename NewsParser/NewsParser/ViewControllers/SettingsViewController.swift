@@ -147,8 +147,8 @@ extension SettingsViewController: UITableViewDelegate {
             
             viewModel?.toggleNewsSourceVisibility(at: indexPath.row)
         case .cache:
-            Utils.makePopUp(parent: self, title: nil, message: "Clear_cache_question".localized(), actionTitle: "Delete".localized(), actionStyle: .destructive, cancelTitle: "Cancel".localized(), actionHandler: {
-                DatabaseManager.shared.deleteAll()
+            Utils.makePopUp(parent: self, title: nil, message: "Clear_cache_question".localized(), actionTitle: "Delete".localized(), actionStyle: .destructive, cancelTitle: "Cancel".localized(), actionHandler: { [weak self] in
+                self?.viewModel?.clearCache()
             })
         default: break
         }

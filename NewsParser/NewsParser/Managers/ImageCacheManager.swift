@@ -91,6 +91,20 @@ class ImageCacheManager {
         return image
     }
     
+    func deleteImageCache() {
+        guard let path = cacheDirectory?.path else { return }
+        
+        do {
+            let imageNames = try fileManager.contentsOfDirectory(atPath: path)
+            for name in imageNames {
+                try fileManager.removeItem(atPath: path.appending("/\(name)"))
+            }
+            memoryCache.removeAllObjects()
+        } catch {
+            print("Failed to clear cache: \(error)")
+        }
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
