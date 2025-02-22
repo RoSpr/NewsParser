@@ -105,6 +105,30 @@ class ImageCacheManager {
         }
     }
     
+    func getStoredImagesSize() -> Int {
+        guard let url = cacheDirectory else {
+            print("No cache directory was found")
+            return 0
+        }
+        
+        let resourceKeys : [URLResourceKey] = [.fileSizeKey]
+        guard let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: resourceKeys, options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
+            print("directoryEnumerator error at \(url): \(error)")
+            return true
+        }) else {
+            print("Failed to create an enumerator")
+            return 0
+        }
+        
+        var totalSize: Int = 0
+        for case let fileURL as URL in enumerator {
+            let resourceValues = try? fileURL.resourceValues(forKeys: Set(resourceKeys))
+            totalSize += resourceValues?.fileSize ?? 0
+        }
+        
+        return totalSize
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
