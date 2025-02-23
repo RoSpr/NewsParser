@@ -73,6 +73,5 @@ extension String {
     
     func localized(_ values: CVarArg...) -> String {
         String(format: Bundle.localized.localizedString(forKey: self, value: nil, table: nil), values)
-//        String(format: NSLocalizedString(self, comment: ""), values)
     }
 }
