@@ -35,6 +35,23 @@
         }
       }
     },
+    "bytes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ bytes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ байт"
+          }
+        }
+      }
+    },
     "Cache" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -205,6 +222,23 @@
         }
       }
     },
+    "gigabytes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ GB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ГБ"
+          }
+        }
+      }
+    },
     "Hour" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -239,6 +273,23 @@
         }
       }
     },
+    "kilobytes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ КБ"
+          }
+        }
+      }
+    },
     "Languages" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -269,6 +320,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Выбор языка"
+          }
+        }
+      }
+    },
+    "megabytes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ MB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ МБ"
           }
         }
       }
@@ -473,6 +541,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Источник \\’%@\\’ уже был добавлен"
+          }
+        }
+      }
+    },
+    "TotalImageCacheSize" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total image cache size:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Используемое место на диске:"
           }
         }
       }
