@@ -10,13 +10,13 @@ import UIKit
 final class LanguageSelectionViewControllerViewModel: SettingDetailViewModel {
     var title: String? = "LanguageSelection".localized()
     var numberOfSections: Int = 1
-    var previouslySelectedRowIndex: IndexPath
+    var previouslySelectedRowIndex: IndexPath?
     
     init() {
         guard let rawLang = DatabaseManager.shared.retrieveValueFromUD(key: .selectedLanguage) as? String,
               let language = SupportedLanguages(rawValue: rawLang),
               let row = SupportedLanguages.index(for: language) else {
-            previouslySelectedRowIndex = IndexPath(row: 0, section: 0)
+            previouslySelectedRowIndex = nil
             return
         }
         previouslySelectedRowIndex = IndexPath(row: row, section: 0)
@@ -31,6 +31,14 @@ final class LanguageSelectionViewControllerViewModel: SettingDetailViewModel {
         SupportedLanguages.language(at: index.row)?.description() ?? ""
     }
     
+    func colorForText(at index: IndexPath) -> UIColor? {
+        return nil
+    }
+    
+    func detailTextForRow(at index: IndexPath) -> String {
+        return ""
+    }
+    
     func choseRow(at index: IndexPath) {
         guard let language = SupportedLanguages.language(at: index.row) else { return }
         
@@ -40,5 +48,9 @@ final class LanguageSelectionViewControllerViewModel: SettingDetailViewModel {
         if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let sceneDelegate = scene.delegate as? SceneDelegate {
             sceneDelegate.recreateRootControllers()
         }
+    }
+    
+    func isRowSelectable(at index: IndexPath) -> Bool {
+        return true
     }
 }
