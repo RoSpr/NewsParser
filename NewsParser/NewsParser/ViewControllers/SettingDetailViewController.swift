@@ -37,6 +37,12 @@ final class SettingDetailViewController: UITableViewController {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
         cell.overrideUserInterfaceStyle = .light
         cell.textLabel?.text = viewModel?.textForRow(at: indexPath)
+        cell.detailTextLabel?.text = viewModel?.detailTextForRow(at: indexPath)
+        cell.selectionStyle = (viewModel?.isRowSelectable(at: indexPath) ?? false) == true ? .default : .none
+        
+        if let color = viewModel?.colorForText(at: indexPath) {
+            cell.textLabel?.textColor = color
+        }
         
         if let selectedCellIndex = viewModel?.previouslySelectedRowIndex, selectedCellIndex == indexPath {
             cell.accessoryType = .checkmark
@@ -46,6 +52,8 @@ final class SettingDetailViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard (viewModel?.isRowSelectable(at: indexPath) ?? false) else { return }
+        
         if let selectedCellIndex = viewModel?.previouslySelectedRowIndex {
             let selectedCell = tableView.cellForRow(at: selectedCellIndex)
             selectedCell?.accessoryType = .none
