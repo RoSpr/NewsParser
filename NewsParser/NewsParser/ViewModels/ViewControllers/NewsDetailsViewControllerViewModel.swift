@@ -8,17 +8,6 @@
 import Foundation
 import UIKit
 
-protocol NewsDetailsViewControllerViewModel {
-    var title: String { get }
-    var sourceTitle: String { get }
-    var description: NSAttributedString { get }
-    var hasImage: Bool { get }
-    var image: UIImage? { get }
-    var pubDate: String? { get }
-    var realmId: String? { get }
-    var link: String { get }
-}
-
 final class NewsDetailsViewControllerViewModelImpl: NewsDetailsViewControllerViewModel {
     private var rssItem: RSSItemRaw
     
