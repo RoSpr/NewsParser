@@ -31,7 +31,7 @@ struct Utils {
         return formatter.string(from: date)
     }
     
-    static func makePopUp(parent: UIViewController, title: String?, message: String?, actionTitle: String, actionStyle: UIAlertAction.Style, cancelTitle: String? = nil, actionHandler: (() -> Void)? = nil, cancelHandler: (() -> Void)? = nil) {
+    static func makePopUp(parent: UIViewController?, title: String?, message: String?, actionTitle: String, actionStyle: UIAlertAction.Style, cancelTitle: String? = nil, actionHandler: (() -> Void)? = nil, cancelHandler: (() -> Void)? = nil) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         let action = UIAlertAction(title: actionTitle, style: actionStyle, handler: { _ in
@@ -47,7 +47,13 @@ struct Utils {
             controller.addAction(cancelAction!)
         }
         
-        parent.present(controller, animated: true)
+        var parentVC = parent
+        if parentVC == nil {
+            parentVC = UIApplication.topViewController()
+        }
+        
+        guard let parentVC = parentVC else { return }
+        parentVC.present(controller, animated: true)
     }
 
     static func addPopupWithTextfield(parent: UIViewController, title: String?, message: String?, textfieldDelegate: UITextFieldDelegate?, actionTitle: String, actionStyle: UIAlertAction.Style, cancelTitle: String?, actionHandler: (() -> Void)?, cancelHandler: (() -> Void)?) {
