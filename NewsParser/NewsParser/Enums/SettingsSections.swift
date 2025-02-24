@@ -34,7 +34,7 @@ enum SettingsSections: Int, CaseIterable {
         case .newsSources:
             return nil
         case .cache:
-            return "Clear_cache".localized()
+            return "Cache".localized()
         }
     }
     
