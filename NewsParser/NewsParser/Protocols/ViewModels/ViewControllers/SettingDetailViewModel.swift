@@ -17,5 +17,7 @@ protocol SettingDetailViewModel {
     func colorForText(at index: IndexPath) -> UIColor?
     func detailTextForRow(at index: IndexPath) -> String
     func choseRow(at index: IndexPath)
+    
     func isRowSelectable(at index: IndexPath) -> Bool
+    func accessoryTypeForRow(at index: IndexPath) -> UITableViewCell.AccessoryType
 }

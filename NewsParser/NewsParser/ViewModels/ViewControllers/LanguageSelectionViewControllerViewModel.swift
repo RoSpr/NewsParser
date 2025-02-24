@@ -53,4 +53,8 @@ final class LanguageSelectionViewControllerViewModel: SettingDetailViewModel {
     func isRowSelectable(at index: IndexPath) -> Bool {
         return true
     }
+    
+    func accessoryTypeForRow(at index: IndexPath) -> UITableViewCell.AccessoryType {
+        return .checkmark
+    }
 }

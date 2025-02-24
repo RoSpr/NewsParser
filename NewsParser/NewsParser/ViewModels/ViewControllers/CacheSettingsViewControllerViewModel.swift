@@ -49,6 +49,10 @@ final class CacheSettingsViewControllerViewModel: SettingDetailViewModel {
         return true
     }
     
+    func accessoryTypeForRow(at index: IndexPath) -> UITableViewCell.AccessoryType {
+        return .none
+    }
+    
     private func clearCache() {
         DatabaseManager.shared.deleteAll()
         ImageCacheManager.shared.deleteImageCache()

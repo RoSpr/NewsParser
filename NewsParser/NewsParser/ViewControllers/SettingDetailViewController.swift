@@ -62,7 +62,7 @@ final class SettingDetailViewController: UITableViewController {
         viewModel?.choseRow(at: indexPath)
         
         let cell = tableView.cellForRow(at: indexPath)
-        cell?.accessoryType = .checkmark
+        cell?.accessoryType = viewModel?.accessoryTypeForRow(at: indexPath) ?? .none
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
