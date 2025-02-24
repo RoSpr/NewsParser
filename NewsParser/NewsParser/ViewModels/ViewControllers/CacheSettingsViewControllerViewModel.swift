@@ -37,8 +37,9 @@ final class CacheSettingsViewControllerViewModel: SettingDetailViewModel {
     func choseRow(at index: IndexPath) {
         switch index.section {
         case 1:
-            // Ask to clear cache
-            break
+            Utils.makePopUp(parent: nil, title: nil, message: "Clear_cache_question".localized(), actionTitle: "Delete".localized(), actionStyle: .destructive, cancelTitle: "Cancel".localized(), actionHandler: { [weak self] in
+                self?.clearCache()
+            })
         default: break
         }
     }
@@ -46,5 +47,10 @@ final class CacheSettingsViewControllerViewModel: SettingDetailViewModel {
     func isRowSelectable(at index: IndexPath) -> Bool {
         guard index.section == 1 else { return false }
         return true
+    }
+    
+    private func clearCache() {
+        DatabaseManager.shared.deleteAll()
+        ImageCacheManager.shared.deleteImageCache()
     }
 }

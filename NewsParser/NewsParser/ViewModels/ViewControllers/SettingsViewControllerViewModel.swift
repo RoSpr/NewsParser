@@ -27,7 +27,6 @@ protocol SettingsViewControllerViewModel {
     func toggleNewsSourceVisibility(at index: Int)
     
     func deleteSource(at index: Int)
-    func clearCache()
 }
 
 final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel {
@@ -109,11 +108,6 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
         let source = newsSources[index]
         
         DatabaseManager.shared.delete(source)
-    }
-    
-    func clearCache() {
-        DatabaseManager.shared.deleteAll()
-        ImageCacheManager.shared.deleteImageCache()
     }
     
     private func addNotificationToken() {
