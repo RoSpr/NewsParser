@@ -115,7 +115,7 @@ extension SettingsViewController: UITableViewDataSource {
             cell.textLabel?.text = viewModel?.getNewsSourceTitleOrLink(at: indexPath.row)
             cell.accessoryType = isVisible ? .checkmark : .none
         case .cache:
-            cell.textLabel?.textColor = .red
+            cell.accessoryType = .disclosureIndicator
         default: break
         }
         
@@ -147,9 +147,9 @@ extension SettingsViewController: UITableViewDelegate {
             
             viewModel?.toggleNewsSourceVisibility(at: indexPath.row)
         case .cache:
-            Utils.makePopUp(parent: self, title: nil, message: "Clear_cache_question".localized(), actionTitle: "Delete".localized(), actionStyle: .destructive, cancelTitle: "Cancel".localized(), actionHandler: { [weak self] in
-                self?.viewModel?.clearCache()
-            })
+            let cacheViewModel = CacheSettingsViewControllerViewModel()
+            let viewController = SettingDetailViewController(viewModel: cacheViewModel)
+            self.navigationController?.pushViewController(viewController, animated: true)
         default: break
         }
         
