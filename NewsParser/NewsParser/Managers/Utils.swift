@@ -73,4 +73,21 @@ struct Utils {
         
         parent.present(controller, animated: true)
     }
+    
+    static func convertBytesToString(_ bytes: Int) -> String {
+        let kb = Float(bytes) / 1024
+        let mb = kb / 1024
+        let gb = mb / 1024
+        
+        if bytes < 1024 {
+            return "bytes".localized(String(format: "%.2f", bytes))
+        } else if kb < 1024 {
+            return "kilobytes".localized(String(format: "%.2f", kb))
+        } else if mb < 1024 {
+            return "megabytes".localized(String(format: "%.2f", mb))
+        } else if gb < 1024 {
+            return "gigabytes".localized(String(format: "%.2f", gb))
+        }
+        return ""
+    }
 }
