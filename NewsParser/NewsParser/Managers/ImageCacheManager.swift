@@ -65,6 +65,7 @@ class ImageCacheManager {
                     try data.write(to: filePath)
                     
                     NotificationCenter.default.post(name: .didFinishImageDownload, object: nil, userInfo: ["realmId": key])
+                    NotificationCenter.default.post(name: .cacheSizeChanged, object: nil)
                 } catch {
                     print("Error saving image data to the file: \(error)")
                 }
@@ -100,6 +101,7 @@ class ImageCacheManager {
                 try fileManager.removeItem(atPath: path.appending("/\(name)"))
             }
             memoryCache.removeAllObjects()
+            NotificationCenter.default.post(name: .cacheSizeChanged, object: nil)
         } catch {
             print("Failed to clear cache: \(error)")
         }

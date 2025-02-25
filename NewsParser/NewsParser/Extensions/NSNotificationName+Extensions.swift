@@ -12,4 +12,5 @@ extension NSNotification.Name {
     public static let willEnterForeground = NSNotification.Name("willEnterForeground")
     public static let didEnterBackground = NSNotification.Name("didEnterBackground")
     public static let didChangeRefreshInterval = NSNotification.Name("didChangeRefreshInterval")
+    public static let cacheSizeChanged = NSNotification.Name("cacheSizeChanged")
 }
