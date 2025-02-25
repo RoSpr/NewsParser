@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22298B172D2450BC008ECB45 /* URLSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22298B162D2450BC008ECB45 /* URLSession+Extensions.swift */; };
-		2234DDA82D6A4998001BD82E /* CacheSettingsViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2234DDA72D6A4989001BD82E /* CacheSettingsViewControllerViewModel.swift */; };
+		2234DDA82D6A4998001BD82E /* CacheSettingsViewControllerViewModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2234DDA72D6A4989001BD82E /* CacheSettingsViewControllerViewModelImpl.swift */; };
 		2234DDAA2D6A4A96001BD82E /* CacheSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2234DDA92D6A4A8F001BD82E /* CacheSections.swift */; };
 		2234DDAC2D6D1399001BD82E /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2234DDAB2D6D1392001BD82E /* UIApplication+Extensions.swift */; };
 		2234DDAE2D6D16B4001BD82E /* NewsListViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2234DDAD2D6D16A8001BD82E /* NewsListViewControllerViewModel.swift */; };
@@ -26,7 +26,7 @@
 		227CA43A2D230C2700D967C5 /* NewsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA41F2D230C2700D967C5 /* NewsListViewController.swift */; };
 		227CA43B2D230C2700D967C5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA4202D230C2700D967C5 /* SettingsViewController.swift */; };
 		227CA43C2D230C2700D967C5 /* NewsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA4222D230C2700D967C5 /* NewsCellViewModel.swift */; };
-		227CA43D2D230C2700D967C5 /* NewsDetailsViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA4242D230C2700D967C5 /* NewsDetailsViewControllerViewModel.swift */; };
+		227CA43D2D230C2700D967C5 /* NewsDetailsViewControllerViewModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA4242D230C2700D967C5 /* NewsDetailsViewControllerViewModelImpl.swift */; };
 		227CA43F2D230C2700D967C5 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA4282D230C2700D967C5 /* NewsTableViewCell.swift */; };
 		227CA4402D230C2700D967C5 /* CircularProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA42A2D230C2700D967C5 /* CircularProgressBarView.swift */; };
 		227CA4412D230C2700D967C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227CA42C2D230C2700D967C5 /* AppDelegate.swift */; };
@@ -34,17 +34,17 @@
 		227CA4432D230C2700D967C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 227CA42D2D230C2700D967C5 /* Assets.xcassets */; };
 		228900DA2D67B57400A946DD /* SettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228900D92D67B56C00A946DD /* SettingDetailViewController.swift */; };
 		228900DE2D67B6DD00A946DD /* SettingDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228900DD2D67B6A800A946DD /* SettingDetailViewModel.swift */; };
-		228900E12D67BB5F00A946DD /* LanguageSelectionViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModel.swift */; };
+		228900E12D67BB5F00A946DD /* LanguageSelectionViewControllerViewModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModelImpl.swift */; };
 		22CBC9482D4D2FDA00910352 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */; };
-		22CBC94A2D4D483000910352 /* Bundle_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC9492D4D483000910352 /* Bundle_Extensions.swift */; };
+		22CBC94A2D4D483000910352 /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC9492D4D483000910352 /* Bundle+Extensions.swift */; };
 		22CBC94C2D4E60CA00910352 /* SupportedLanguages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC94B2D4E60C400910352 /* SupportedLanguages.swift */; };
 		22CBC94E2D4E632400910352 /* SettingsSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC94D2D4E631F00910352 /* SettingsSections.swift */; };
 		22D42F772D352DC100B3D685 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */; };
 		22D42F792D352DF300B3D685 /* UpdateFrequencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */; };
 		22F70E602D25B5780020C807 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E5F2D25B5780020C807 /* ImageCacheManager.swift */; };
-		22F70E642D2705780020C807 /* NewsListViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E632D2705780020C807 /* NewsListViewControllerViewModel.swift */; };
+		22F70E642D2705780020C807 /* NewsListViewControllerViewModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E632D2705780020C807 /* NewsListViewControllerViewModelImpl.swift */; };
 		22F70E662D2C251A0020C807 /* NSNotificationName+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */; };
-		22F70E682D31673D0020C807 /* SettingsViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E672D31673D0020C807 /* SettingsViewControllerViewModel.swift */; };
+		22F70E682D31673D0020C807 /* SettingsViewControllerViewModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E672D31673D0020C807 /* SettingsViewControllerViewModelImpl.swift */; };
 		22F70E6A2D317A180020C807 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E692D317A180020C807 /* UINavigationController+Extensions.swift */; };
 		22F70E6C2D3450E50020C807 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E6B2D3450E50020C807 /* String+Extensions.swift */; };
 		7270065CE8C4DDE4A8DB49EF /* Pods_NewsParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 616DE3B8062CC4402626EE7C /* Pods_NewsParser.framework */; };
@@ -52,7 +52,7 @@
 
 /* Begin PBXFileReference section */
 		22298B162D2450BC008ECB45 /* URLSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extensions.swift"; sourceTree = "<group>"; };
-		2234DDA72D6A4989001BD82E /* CacheSettingsViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheSettingsViewControllerViewModel.swift; sourceTree = "<group>"; };
+		2234DDA72D6A4989001BD82E /* CacheSettingsViewControllerViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheSettingsViewControllerViewModelImpl.swift; sourceTree = "<group>"; };
 		2234DDA92D6A4A8F001BD82E /* CacheSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheSections.swift; sourceTree = "<group>"; };
 		2234DDAB2D6D1392001BD82E /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
 		2234DDAD2D6D16A8001BD82E /* NewsListViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListViewControllerViewModel.swift; sourceTree = "<group>"; };
@@ -70,7 +70,7 @@
 		227CA41F2D230C2700D967C5 /* NewsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListViewController.swift; sourceTree = "<group>"; };
 		227CA4202D230C2700D967C5 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		227CA4222D230C2700D967C5 /* NewsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCellViewModel.swift; sourceTree = "<group>"; };
-		227CA4242D230C2700D967C5 /* NewsDetailsViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDetailsViewControllerViewModel.swift; sourceTree = "<group>"; };
+		227CA4242D230C2700D967C5 /* NewsDetailsViewControllerViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDetailsViewControllerViewModelImpl.swift; sourceTree = "<group>"; };
 		227CA4282D230C2700D967C5 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		227CA42A2D230C2700D967C5 /* CircularProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBarView.swift; sourceTree = "<group>"; };
 		227CA42C2D230C2700D967C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,18 +81,18 @@
 		227CA4482D23137800D967C5 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		228900D92D67B56C00A946DD /* SettingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailViewController.swift; sourceTree = "<group>"; };
 		228900DD2D67B6A800A946DD /* SettingDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailViewModel.swift; sourceTree = "<group>"; };
-		228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectionViewControllerViewModel.swift; sourceTree = "<group>"; };
+		228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectionViewControllerViewModelImpl.swift; sourceTree = "<group>"; };
 		22CBC9472D4D2FDA00910352 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		22CBC9492D4D483000910352 /* Bundle_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle_Extensions.swift; sourceTree = "<group>"; };
+		22CBC9492D4D483000910352 /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		22CBC94B2D4E60C400910352 /* SupportedLanguages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedLanguages.swift; sourceTree = "<group>"; };
 		22CBC94D2D4E631F00910352 /* SettingsSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSections.swift; sourceTree = "<group>"; };
 		22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFrequencies.swift; sourceTree = "<group>"; };
 		22EFD9AD2D18A6D900E8B1AF /* NewsParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F70E5F2D25B5780020C807 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
-		22F70E632D2705780020C807 /* NewsListViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListViewControllerViewModel.swift; sourceTree = "<group>"; };
+		22F70E632D2705780020C807 /* NewsListViewControllerViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListViewControllerViewModelImpl.swift; sourceTree = "<group>"; };
 		22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotificationName+Extensions.swift"; sourceTree = "<group>"; };
-		22F70E672D31673D0020C807 /* SettingsViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerViewModel.swift; sourceTree = "<group>"; };
+		22F70E672D31673D0020C807 /* SettingsViewControllerViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerViewModelImpl.swift; sourceTree = "<group>"; };
 		22F70E692D317A180020C807 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
 		22F70E6B2D3450E50020C807 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		577A6B1F0D96FE9FC7F74970 /* Pods-NewsParser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsParser.release.xcconfig"; path = "Target Support Files/Pods-NewsParser/Pods-NewsParser.release.xcconfig"; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 				22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */,
 				22F70E692D317A180020C807 /* UINavigationController+Extensions.swift */,
 				22F70E6B2D3450E50020C807 /* String+Extensions.swift */,
-				22CBC9492D4D483000910352 /* Bundle_Extensions.swift */,
+				22CBC9492D4D483000910352 /* Bundle+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -178,11 +178,11 @@
 		227CA4262D230C2700D967C5 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				2234DDA72D6A4989001BD82E /* CacheSettingsViewControllerViewModel.swift */,
-				228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModel.swift */,
-				22F70E632D2705780020C807 /* NewsListViewControllerViewModel.swift */,
-				227CA4242D230C2700D967C5 /* NewsDetailsViewControllerViewModel.swift */,
-				22F70E672D31673D0020C807 /* SettingsViewControllerViewModel.swift */,
+				2234DDA72D6A4989001BD82E /* CacheSettingsViewControllerViewModelImpl.swift */,
+				228900E02D67BB5200A946DD /* LanguageSelectionViewControllerViewModelImpl.swift */,
+				22F70E632D2705780020C807 /* NewsListViewControllerViewModelImpl.swift */,
+				227CA4242D230C2700D967C5 /* NewsDetailsViewControllerViewModelImpl.swift */,
+				22F70E672D31673D0020C807 /* SettingsViewControllerViewModelImpl.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -421,7 +421,7 @@
 				227CA4312D230C2700D967C5 /* DatabaseManager.swift in Sources */,
 				227CA4322D230C2700D967C5 /* NetworkManager.swift in Sources */,
 				2234DDAA2D6A4A96001BD82E /* CacheSections.swift in Sources */,
-				22F70E642D2705780020C807 /* NewsListViewControllerViewModel.swift in Sources */,
+				22F70E642D2705780020C807 /* NewsListViewControllerViewModelImpl.swift in Sources */,
 				22D42F792D352DF300B3D685 /* UpdateFrequencies.swift in Sources */,
 				227CA4332D230C2700D967C5 /* RSSParserDelegate.swift in Sources */,
 				22F70E6C2D3450E50020C807 /* String+Extensions.swift in Sources */,
@@ -430,9 +430,9 @@
 				227CA4362D230C2700D967C5 /* NewsSource.swift in Sources */,
 				227CA4372D230C2700D967C5 /* RSSItem.swift in Sources */,
 				228900DA2D67B57400A946DD /* SettingDetailViewController.swift in Sources */,
-				22F70E682D31673D0020C807 /* SettingsViewControllerViewModel.swift in Sources */,
+				22F70E682D31673D0020C807 /* SettingsViewControllerViewModelImpl.swift in Sources */,
 				22298B172D2450BC008ECB45 /* URLSession+Extensions.swift in Sources */,
-				22CBC94A2D4D483000910352 /* Bundle_Extensions.swift in Sources */,
+				22CBC94A2D4D483000910352 /* Bundle+Extensions.swift in Sources */,
 				22F70E662D2C251A0020C807 /* NSNotificationName+Extensions.swift in Sources */,
 				22D42F772D352DC100B3D685 /* UserDefaultsKeys.swift in Sources */,
 				22CBC94E2D4E632400910352 /* SettingsSections.swift in Sources */,
@@ -441,11 +441,11 @@
 				22F70E6A2D317A180020C807 /* UINavigationController+Extensions.swift in Sources */,
 				2234DDB22D6D170F001BD82E /* SettingsViewControllerViewModel.swift in Sources */,
 				227CA43A2D230C2700D967C5 /* NewsListViewController.swift in Sources */,
-				2234DDA82D6A4998001BD82E /* CacheSettingsViewControllerViewModel.swift in Sources */,
+				2234DDA82D6A4998001BD82E /* CacheSettingsViewControllerViewModelImpl.swift in Sources */,
 				227CA43B2D230C2700D967C5 /* SettingsViewController.swift in Sources */,
 				22F70E602D25B5780020C807 /* ImageCacheManager.swift in Sources */,
 				227CA43C2D230C2700D967C5 /* NewsCellViewModel.swift in Sources */,
-				227CA43D2D230C2700D967C5 /* NewsDetailsViewControllerViewModel.swift in Sources */,
+				227CA43D2D230C2700D967C5 /* NewsDetailsViewControllerViewModelImpl.swift in Sources */,
 				227CA43F2D230C2700D967C5 /* NewsTableViewCell.swift in Sources */,
 				22CBC94C2D4E60CA00910352 /* SupportedLanguages.swift in Sources */,
 				227CA4402D230C2700D967C5 /* CircularProgressBarView.swift in Sources */,
@@ -453,7 +453,7 @@
 				228900DE2D67B6DD00A946DD /* SettingDetailViewModel.swift in Sources */,
 				2234DDAE2D6D16B4001BD82E /* NewsListViewControllerViewModel.swift in Sources */,
 				227CA4412D230C2700D967C5 /* AppDelegate.swift in Sources */,
-				228900E12D67BB5F00A946DD /* LanguageSelectionViewControllerViewModel.swift in Sources */,
+				228900E12D67BB5F00A946DD /* LanguageSelectionViewControllerViewModelImpl.swift in Sources */,
 				227CA4422D230C2700D967C5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

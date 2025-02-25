@@ -136,7 +136,7 @@ extension SettingsViewController: UITableViewDelegate {
         case .updates:
             presentPickerView()
         case .languages:
-            let langViewModel = LanguageSelectionViewControllerViewModel()
+            let langViewModel = LanguageSelectionViewControllerViewModelImpl()
             let viewController = SettingDetailViewController(viewModel: langViewModel)
             self.navigationController?.pushViewController(viewController, animated: true)
         case .initialSources:
@@ -147,7 +147,7 @@ extension SettingsViewController: UITableViewDelegate {
             
             viewModel?.toggleNewsSourceVisibility(at: indexPath.row)
         case .cache:
-            let cacheViewModel = CacheSettingsViewControllerViewModel()
+            let cacheViewModel = CacheSettingsViewControllerViewModelImpl()
             let viewController = SettingDetailViewController(viewModel: cacheViewModel)
             self.navigationController?.pushViewController(viewController, animated: true)
         default: break
