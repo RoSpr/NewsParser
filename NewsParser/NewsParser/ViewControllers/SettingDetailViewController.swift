@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import Combine
 
 final class SettingDetailViewController: UITableViewController {
+    private var cancellables = Set<AnyCancellable>()
+    
     var viewModel: SettingDetailViewModel?
     
     init(viewModel: SettingDetailViewModel) {
@@ -19,6 +22,8 @@ final class SettingDetailViewController: UITableViewController {
         tableView.overrideUserInterfaceStyle = .light
         
         self.navigationItem.title = viewModel.title
+        
+        bindViewModel()
     }
     
     required init?(coder: NSCoder) {
@@ -65,5 +70,16 @@ final class SettingDetailViewController: UITableViewController {
         cell?.accessoryType = viewModel?.accessoryTypeForRow(at: indexPath) ?? .none
         
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    private func bindViewModel() {
+        guard let viewModel = viewModel as? RxSettingDetailViewModel else { return }
+        viewModel.reloadCellPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] indexPaths in
+                guard let self = self else { return }
+                self.tableView.reloadRows(at: indexPaths, with: .none)
+            }
+            .store(in: &cancellables)
     }
 }

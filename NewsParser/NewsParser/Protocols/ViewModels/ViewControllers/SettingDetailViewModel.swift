@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 protocol SettingDetailViewModel {
     var title: String? { get }
@@ -20,4 +21,8 @@ protocol SettingDetailViewModel {
     
     func isRowSelectable(at index: IndexPath) -> Bool
     func accessoryTypeForRow(at index: IndexPath) -> UITableViewCell.AccessoryType
+}
+
+protocol RxSettingDetailViewModel: SettingDetailViewModel {
+    var reloadCellPublisher: PassthroughSubject<[IndexPath], Never> { get }
 }
