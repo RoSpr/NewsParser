@@ -41,6 +41,7 @@
 		22CBC94E2D4E632400910352 /* SettingsSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CBC94D2D4E631F00910352 /* SettingsSections.swift */; };
 		22D42F772D352DC100B3D685 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */; };
 		22D42F792D352DF300B3D685 /* UpdateFrequencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */; };
+		22F6D0602D7B40ED00969835 /* SettingsViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F6D05F2D7B40E500969835 /* SettingsViewControllerDelegate.swift */; };
 		22F70E602D25B5780020C807 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E5F2D25B5780020C807 /* ImageCacheManager.swift */; };
 		22F70E642D2705780020C807 /* NewsListViewControllerViewModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E632D2705780020C807 /* NewsListViewControllerViewModelImpl.swift */; };
 		22F70E662D2C251A0020C807 /* NSNotificationName+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */; };
@@ -89,6 +90,7 @@
 		22D42F762D352DC100B3D685 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		22D42F782D352DF300B3D685 /* UpdateFrequencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFrequencies.swift; sourceTree = "<group>"; };
 		22EFD9AD2D18A6D900E8B1AF /* NewsParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22F6D05F2D7B40E500969835 /* SettingsViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerDelegate.swift; sourceTree = "<group>"; };
 		22F70E5F2D25B5780020C807 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		22F70E632D2705780020C807 /* NewsListViewControllerViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListViewControllerViewModelImpl.swift; sourceTree = "<group>"; };
 		22F70E652D2C251A0020C807 /* NSNotificationName+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotificationName+Extensions.swift"; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				228900DB2D67B69200A946DD /* ViewModels */,
+				22F6D05F2D7B40E500969835 /* SettingsViewControllerDelegate.swift */,
 				227CA41C2D230C2700D967C5 /* NewsListViewControllerDelegate.swift */,
 			);
 			path = Protocols;
@@ -435,6 +438,7 @@
 				22CBC94A2D4D483000910352 /* Bundle+Extensions.swift in Sources */,
 				22F70E662D2C251A0020C807 /* NSNotificationName+Extensions.swift in Sources */,
 				22D42F772D352DC100B3D685 /* UserDefaultsKeys.swift in Sources */,
+				22F6D0602D7B40ED00969835 /* SettingsViewControllerDelegate.swift in Sources */,
 				22CBC94E2D4E632400910352 /* SettingsSections.swift in Sources */,
 				227CA4382D230C2700D967C5 /* NewsListViewControllerDelegate.swift in Sources */,
 				227CA4392D230C2700D967C5 /* NewsDetailsViewController.swift in Sources */,

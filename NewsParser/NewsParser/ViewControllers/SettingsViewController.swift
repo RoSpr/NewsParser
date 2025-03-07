@@ -182,10 +182,6 @@ extension SettingsViewController: UITabBarControllerDelegate {
 }
 
 //MARK: - SettingsViewControllerDelegate
-protocol SettingsViewControllerDelegate {
-    func reloadSources()
-}
-
 extension SettingsViewController: SettingsViewControllerDelegate {
     func reloadSources() {
         tableView.reloadSections(IndexSet(integer: SettingsSections.newsSources.rawValue), with: .none)
