@@ -595,6 +595,23 @@
           }
         }
       }
+    },
+    "VersionNumber" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version number:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Номер версии:"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
