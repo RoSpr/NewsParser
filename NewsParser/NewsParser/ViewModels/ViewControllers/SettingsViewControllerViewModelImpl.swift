@@ -26,6 +26,10 @@ final class SettingsViewControllerViewModelImpl: SettingsViewControllerViewModel
         return SupportedLanguages(rawValue: language) ?? .en
     }
     
+    var version: String {
+        return Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0.0"
+    }
+    
     var delegate: SettingsViewControllerDelegate?
     
     var numberOfSections: Int {

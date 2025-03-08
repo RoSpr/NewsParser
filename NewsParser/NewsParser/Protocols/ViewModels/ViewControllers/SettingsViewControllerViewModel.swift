@@ -11,6 +11,8 @@ protocol SettingsViewControllerViewModel {
     
     var selectedLanguage: SupportedLanguages { get }
     
+    var version: String { get }
+    
     var delegate: SettingsViewControllerDelegate? { get set }
     
     var numberOfSections: Int { get }

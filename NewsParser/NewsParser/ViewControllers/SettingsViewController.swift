@@ -116,6 +116,9 @@ extension SettingsViewController: UITableViewDataSource {
             cell.accessoryType = isVisible ? .checkmark : .none
         case .cache:
             cell.accessoryType = .disclosureIndicator
+        case .version:
+            cell.detailTextLabel?.text = viewModel?.version
+            cell.selectionStyle = .none
         default: break
         }
         
