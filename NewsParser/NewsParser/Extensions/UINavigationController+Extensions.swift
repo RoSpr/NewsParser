@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 extension UINavigationController {
-    func configureAppeearance() {
+    func configureAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundEffect = UIBlurEffect(style: .light)

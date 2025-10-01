@@ -76,7 +76,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let newsNavigationController = UINavigationController(rootViewController: newsListViewController)
         newsNavigationController.tabBarItem = UITabBarItem(title: "News".localized(), image: UIImage(systemName: "newspaper"), tag: 0)
         
-        newsNavigationController.configureAppeearance()
+        newsNavigationController.configureAppearance()
         
         return newsNavigationController
     }
@@ -88,7 +88,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let settingsNavigationController = UINavigationController(rootViewController: settingsViewController)
         settingsNavigationController.tabBarItem = UITabBarItem(title: "Settings".localized(), image: UIImage(systemName: "gear"), tag: 1)
         
-        settingsNavigationController.configureAppeearance()
+        settingsNavigationController.configureAppearance()
         
         return settingsNavigationController
     }

@@ -12,7 +12,7 @@ import SafariServices
 final class NewsDetailsViewController: UIViewController {
     var viewModel: NewsDetailsViewControllerViewModel? = nil
     
-    private lazy var topLabelsTopContraintToTop: NSLayoutConstraint = sourceTitleLabel.topAnchor.constraint(equalTo: newsTitleLabel.bottomAnchor, constant: 10)
+    private lazy var topLabelsTopConstraintToTop: NSLayoutConstraint = sourceTitleLabel.topAnchor.constraint(equalTo: newsTitleLabel.bottomAnchor, constant: 10)
     private lazy var topLabelsTopConstraintToImageView: NSLayoutConstraint = sourceTitleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10)
     
     private var scrollView: UIScrollView = {
@@ -222,7 +222,7 @@ final class NewsDetailsViewController: UIViewController {
     
     private func activateTopConstraint(hasImage: Bool) {
         topLabelsTopConstraintToImageView.isActive = hasImage
-        topLabelsTopContraintToTop.isActive = !hasImage
+        topLabelsTopConstraintToTop.isActive = !hasImage
     }
     
     private func setupNotificationObservers() {
