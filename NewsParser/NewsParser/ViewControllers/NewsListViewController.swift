@@ -135,22 +135,30 @@ final class NewsListViewController: UIViewController {
 //MARK: - Table view delegate
 extension NewsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
-        if cell?.viewModel?.isRead == false {
-            cell?.wasRead()
+        guard let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell,
+              let viewModel = viewModel else {
+            return
         }
+        
+        if cell.viewModel?.isRead == false {
+            cell.wasRead()
+        }
+        
         tableView.deselectRow(at: indexPath, animated: false)
         
         let newsDetailViewController = NewsDetailsViewController()
-        if let viewModel = viewModel {
-            let image = cell?.viewModel?.image
-            
-            let newsDetailViewModel = NewsDetailsViewControllerViewModelImpl(item: viewModel.itemAtIndex(indexPath: indexPath, isInSearch: isInSearchMode))
-            newsDetailViewController.viewModel = newsDetailViewModel
-            
-            if let realmId = newsDetailViewModel.realmId, image == nil, viewModel.isDownloadInProgress(id: realmId) {
-                newsDetailViewController.setInitialDownloadProgress(cell?.viewModel?.downloadProgress)
-                viewModel.networkManager.addProgressObservers(progressObserver: newsDetailViewController.downloadProgressHandler, completionObserver: nil, realmId: realmId)
+        let newsDetailViewModel = NewsDetailsViewControllerViewModelImpl(item: viewModel.itemAtIndex(indexPath: indexPath, isInSearch: isInSearchMode))
+        newsDetailViewController.viewModel = newsDetailViewModel
+        
+        if let realmId = newsDetailViewModel.realmId,
+           newsDetailViewModel.image == nil,
+           viewModel.isDownloadInProgress(id: realmId) {
+            Task {
+                for await progress in viewModel.networkManager.observeProgress(for: realmId) {
+                    await MainActor.run {
+                        newsDetailViewController.downloadProgressHandler(progress)
+                    }
+                }
             }
         }
         
@@ -179,39 +187,56 @@ extension NewsListViewController: UITableViewDataSource {
         }
         
         let cellViewModel = NewsCellViewModelImpl(realmId: realmId,
-                                                   newsHeader: rssItem.title,
-                                                   newsSource: rssItem.sourceTitle,
-                                                   date: rssItem.pubDate,
-                                                   hasImage: rssItem.imageLink != nil,
-                                                   isRead: rssItem.isRead)
+                                                  newsHeader: rssItem.title,
+                                                  newsSource: rssItem.sourceTitle,
+                                                  date: rssItem.pubDate,
+                                                  hasImage: rssItem.imageLink != nil,
+                                                  isRead: rssItem.isRead)
         cell.set(viewModel: cellViewModel)
         
-        if !rssItem.isImageDownloaded, viewModel.shouldDownload(id: realmId), let imageLink = rssItem.imageLink, let url = URL(string: imageLink) {
-            viewModel.networkManager.downloadContent(from: url, realmId: realmId, completion: { [weak self] localURL, error in
-                self?.queue.async {
-                    if let localURL = localURL, let data = try? Data(contentsOf: localURL), let image = UIImage(data: data) {
-                        ImageCacheManager.shared.saveToDisk(image: image, forKey: realmId)
-                        
-                        if let savedItem = DatabaseManager.shared.fetch(RSSItem.self, predicate: NSPredicate(format: "id == %@", realmId)).first {
-                            DatabaseManager.shared.update {
-                                savedItem.isImageDownloaded = true
-                            }
-                        }
-                        
-                        cell.downloadCompletedHandler(image)
-                        
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-                            
-                            if let indexPath = self.viewModel?.getIndexOfItem(realmId: rssItem.realmId, needsFiltered: self.isInSearchMode) {
-                                self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                            }
-                        }
-                    } else if let error = error {
-                        print("Failed to download image: \(error)")
+        guard !rssItem.isImageDownloaded, viewModel.shouldDownload(id: realmId),
+              let imageLink = rssItem.imageLink, let url = URL(string: imageLink) else {
+            return cell
+        }
+        
+        Task {
+            for await progress in viewModel.networkManager.observeProgress(for: realmId) {
+                await MainActor.run {
+                    cell.downloadProgressHandler(progress)
+                }
+            }
+        }
+        
+        Task(priority: .background) {
+            do {
+                let localURL = try await viewModel.networkManager.downloadContent(from: url, realmId: realmId)
+                let data = try Data(contentsOf: localURL)
+                
+                guard let image = UIImage(data: data) else {
+                    print("Failed to get an image from data")
+                    return
+                }
+                
+                ImageCacheManager.shared.saveToDisk(image: image, forKey: realmId)
+                
+                if let savedItem = DatabaseManager.shared.fetch(RSSItem.self, predicate: NSPredicate(format: "id == %@", realmId)).first {
+                    DatabaseManager.shared.update {
+                        savedItem.isImageDownloaded = true
                     }
                 }
-            }, progressUpdate: cell.downloadProgressHandler)
+                
+                await MainActor.run {
+                    cell.downloadCompletedHandler(image)
+                    if let indexPath =
+                        self.viewModel?.getIndexOfItem(realmId: rssItem.realmId,
+                                                       needsFiltered: self.isInSearchMode) {
+                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    }
+                }
+                
+            } catch {
+                print("Failed to download image or convert it to data: \(error)")
+            }
         }
         
         return cell

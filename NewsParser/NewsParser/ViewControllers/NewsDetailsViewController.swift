@@ -100,11 +100,6 @@ final class NewsDetailsViewController: UIViewController {
         return progressView
     }()
     
-    func setInitialDownloadProgress(_ progress: Double?) {
-        guard let progress = progress else { return }
-        self.downloadProgressView.setProgress(progress, animated: false)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
