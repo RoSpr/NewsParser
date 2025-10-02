@@ -56,21 +56,13 @@ class ImageCacheManager {
         return (image, data.count)
     }
     
-    func saveToDisk(image: UIImage, forKey key: String) {
-        guard let data = image.pngData() else { return }
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            if let filePath = self.cacheDirectory?.appendingPathComponent(key) {
-                do {
-                    try data.write(to: filePath)
-                    
-                    NotificationCenter.default.post(name: .didFinishImageDownload, object: nil, userInfo: ["realmId": key])
-                    NotificationCenter.default.post(name: .cacheSizeChanged, object: nil)
-                } catch {
-                    print("Error saving image data to the file: \(error)")
-                }
-            }
-        }
+    func moveToCacheDir(from temp: URL, realmId: String) throws -> URL {
+        guard let dir = cacheDirectory else { throw ImageCacheError.nilCacheDirectory }
+        
+        let filepath = dir.appendingPathComponent(realmId)
+        try fileManager.moveItem(at: temp, to: filepath)
+        
+        return filepath
     }
     
     func fetchImage(for id: String?) -> UIImage? {

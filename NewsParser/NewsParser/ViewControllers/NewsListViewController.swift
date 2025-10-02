@@ -210,14 +210,14 @@ extension NewsListViewController: UITableViewDataSource {
         Task(priority: .background) {
             do {
                 let localURL = try await viewModel.networkManager.downloadContent(from: url, realmId: realmId)
-                let data = try Data(contentsOf: localURL)
+                
+                let url = try ImageCacheManager.shared.moveToCacheDir(from: localURL, realmId: realmId)
+                let data = try Data(contentsOf: url)
                 
                 guard let image = UIImage(data: data) else {
                     print("Failed to get an image from data")
                     return
                 }
-                
-                ImageCacheManager.shared.saveToDisk(image: image, forKey: realmId)
                 
                 if let savedItem = DatabaseManager.shared.fetch(RSSItem.self, predicate: NSPredicate(format: "id == %@", realmId)).first {
                     DatabaseManager.shared.update {
