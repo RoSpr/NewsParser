@@ -35,3 +35,11 @@ struct RSSItemRaw {
     var isRead: Bool
     var isImageDownloaded: Bool
 }
+
+struct RSSCurrentItem {
+    var title: String?
+    var link: String?
+    var pubDate: String?
+    var description: String?
+    var imageLink: String?
+}

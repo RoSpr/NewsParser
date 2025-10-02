@@ -9,7 +9,7 @@ import Foundation
 
 class RSSParserDelegate: NSObject, XMLParserDelegate {
     private let onItemParsed: (RSSItemRaw) -> Void
-    private var currentItem: [String: String]? = nil
+    private var currentItem = RSSCurrentItem()
     private var currentElement: String = ""
     private var currentValue: String = ""
     
@@ -23,9 +23,9 @@ class RSSParserDelegate: NSObject, XMLParserDelegate {
         currentElement = elementName
         currentValue = ""
         if elementName == "item" {
-            currentItem = [:]
+            currentItem = RSSCurrentItem()
         } else if elementName == "enclosure", attributeDict["type"] == "image/jpeg" {
-            currentItem?["imageLink"] = attributeDict["url"]
+            currentItem.imageLink = attributeDict["url"]
         }
     }
 
@@ -34,20 +34,25 @@ class RSSParserDelegate: NSObject, XMLParserDelegate {
     }
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if elementName == "item" {
-            if let title = currentItem?["title"],
-               let link = currentItem?["link"],
-               let pubDate = Utils.getDateFromString(currentItem?["pubDate"]) {
-                let description = currentItem?["description"]
-                let imageLink = currentItem?["imageLink"]
-                
-                onItemParsed(RSSItemRaw(sourceTitle: sourceTitle ?? "Unknown", title: title, link: link, imageLink: imageLink, description: description, pubDate: pubDate, isRead: false, isImageDownloaded: false))
+        let trimmedValue = currentValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        switch elementName {
+        case "title":
+            sourceTitle == nil ? (sourceTitle = trimmedValue) : (currentItem.title = trimmedValue)
+        case "link":
+            currentItem.link = trimmedValue
+        case "pubDate":
+            currentItem.pubDate = trimmedValue
+        case "description":
+            currentItem.description = trimmedValue
+        case "item":
+            if let title = currentItem.title,
+               let link = currentItem.link,
+               let pubDate = Utils.getDateFromString(currentItem.pubDate) {
+                let raw = RSSItemRaw(realmId: nil, sourceTitle: sourceTitle ?? "Unknown", title: title, link: link, imageLink: currentItem.imageLink, description: currentItem.description, pubDate: pubDate, isRead: false, isImageDownloaded: false)
+                onItemParsed(raw)
             }
-            currentItem = nil
-        } else if elementName == "title" && sourceTitle == nil {
-            sourceTitle = currentValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        } else if currentItem != nil {
-            currentItem?[elementName] = currentValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        default: break
         }
     }
     
