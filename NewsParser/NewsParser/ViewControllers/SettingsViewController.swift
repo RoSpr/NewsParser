@@ -160,6 +160,9 @@ extension SettingsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let sectionType = viewModel?.getSectionType(indexPath.section)
+        guard case .newsSources = sectionType else { return nil }
+        
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localized()) { [weak self] (action, view, completionHandler) in
             self?.viewModel?.deleteSource(at: indexPath.row)
             completionHandler(true)
